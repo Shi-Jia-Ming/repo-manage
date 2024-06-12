@@ -11,7 +11,10 @@
   },
   "tauri": {
     "allowlist": {
-      "all": false
+      "all": false,
+      "window": {
+        "all": true
+      }
     },
     "bundle": {
       "active": true,
@@ -28,7 +31,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.tauri.dev",
+      "identifier": "com.stark.repo-manage",
       "longDescription": "",
       "macOS": {
         "entitlements": null,
@@ -54,11 +57,13 @@
     },
     "windows": [
       {
+        "label": "customization",
         "fullscreen": false,
         "height": 600,
         "resizable": true,
         "title": "repo-manage",
-        "width": 800
+        "width": 800,
+        "decorations": false
       }
     ]
   }
