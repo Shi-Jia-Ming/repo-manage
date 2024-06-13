@@ -3,7 +3,7 @@ import GlobalToolBar from "./components/GlobalToolBar.vue";
 import GlobalSider from "./components/GlobalSider.vue";
 import GlobalStatusBar from "@/layout/components/GlobalStatusBar.vue";
 import AppMain from "@/layout/components/AppMain.vue";
-import { Multipane, MultipaneResizer } from "vue-multipane/src";
+import { Multipane } from "vue-multipane/src";
 </script>
 
 <template>
@@ -11,7 +11,6 @@ import { Multipane, MultipaneResizer } from "vue-multipane/src";
     <global-tool-bar />
     <multipane layout="vertical" class="custom-resizer main-layout">
       <global-sider />
-      <multipane-resizer />
       <app-main />
     </multipane>
     <global-status-bar />
@@ -34,28 +33,5 @@ import { Multipane, MultipaneResizer } from "vue-multipane/src";
   height: 100%;
 }
 
-.multipane-resizer {
-  margin: 0; left: 0;
-  position: relative;
 
-  &:before {
-    display: block;
-    content: "";
-    width: 3px;
-    height: 40px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-top: -20px;
-    margin-left: -1.5px;
-    border-left: 1px solid #ccc;
-    border-right: 1px solid #ccc;
-  }
-
-  &:hover {
-    &:before {
-      border-color: #999;
-    }
-  }
-}
 </style>

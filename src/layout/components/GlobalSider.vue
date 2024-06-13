@@ -2,6 +2,7 @@
 import router from "@/router";
 import {computed, ComputedRef, onMounted, Ref, ref} from "vue";
 import {RouteRecordRaw} from "vue-router";
+import {MultipaneResizer} from "vue-multipane/src";
 
 // get options of the sidebar routes
 const sidebarRoutes: ComputedRef<RouteRecordRaw> = computed(() => {
@@ -9,7 +10,7 @@ const sidebarRoutes: ComputedRef<RouteRecordRaw> = computed(() => {
 });
 
 // is the sidebar visible
-const isSidebarVisible: Ref<Boolean> = ref(true);
+const isSidebarVisible: Ref<Boolean> = ref(false);
 
 // the sidebar ref
 const sidebarRef: Ref<HTMLElement | null> = ref(null);
@@ -31,6 +32,8 @@ const handleHide = (route: RouteRecordRaw) => {
   } else if (router.currentRoute.value.name !== route.name) {
     // switch the sidebar
     router.replace({name: route.name});
+    // cache the width of the sidebar when it is switched
+    sidebarWidth.value = <number>sidebarRef.value?.offsetWidth;
   } else if (router.currentRoute.value.name === route.name) {
     // close the sidebar
     router.replace({name: sidebarRoutes.value.name});
@@ -61,6 +64,7 @@ const handleHide = (route: RouteRecordRaw) => {
       <router-view/>
     </div>
   </div>
+  <multipane-resizer v-if="isSidebarVisible"/>
 </template>
 
 <style scoped lang="scss">
@@ -106,5 +110,31 @@ const handleHide = (route: RouteRecordRaw) => {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+.multipane-resizer {
+  margin: 0 2px 0 0;
+  left: 0;
+  position: relative;
+
+  &:before {
+    display: block;
+    content: "";
+    width: 3px;
+    height: 40px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -20px;
+    margin-left: -1.5px;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+  }
+
+  &:hover {
+    &:before {
+      border-color: #999;
+    }
+  }
 }
 </style>
