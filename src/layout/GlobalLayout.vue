@@ -11,7 +11,7 @@ import { Multipane, MultipaneResizer } from "vue-multipane/src";
     <global-tool-bar />
     <multipane layout="vertical" class="custom-resizer main-layout">
       <global-sider />
-        <multipane-resizer />
+      <multipane-resizer />
       <app-main />
     </multipane>
     <global-status-bar />

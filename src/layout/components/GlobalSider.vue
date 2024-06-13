@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import router from "@/router";
-import {computed, ComputedRef, Ref, ref} from "vue";
+import {computed, ComputedRef, onMounted, Ref, ref} from "vue";
 import {RouteRecordRaw} from "vue-router";
 
 // get options of the sidebar routes
@@ -11,21 +11,32 @@ const sidebarRoutes: ComputedRef<RouteRecordRaw> = computed(() => {
 // is the sidebar visible
 const isSidebarVisible: Ref<Boolean> = ref(true);
 
+// the sidebar ref
+const sidebarRef: Ref<HTMLElement | null> = ref(null);
+
+// cache the width of the sidebar
+const sidebarWidth: Ref<number> = ref(50);
+
+onMounted(() => {
+  // cache the width of the sidebar on mounted
+  sidebarWidth.value = <number>sidebarRef.value?.offsetWidth;
+})
+
 // handle hide sidebar
 const handleHide = (route: RouteRecordRaw) => {
-  if (router.currentRoute.value.name === sidebarRoutes.value.name) {
+  if (!isSidebarVisible.value) {
+    // open the sidebar
     router.replace({name: route.name});
     isSidebarVisible.value = !isSidebarVisible.value;
   } else if (router.currentRoute.value.name !== route.name) {
+    // switch the sidebar
     router.replace({name: route.name});
   } else if (router.currentRoute.value.name === route.name) {
-    if (isSidebarVisible.value) {
-      router.replace({name: sidebarRoutes.value.name});
-      isSidebarVisible.value = !isSidebarVisible.value;
-    } else {
-      router.replace({name: route.name});
-      isSidebarVisible.value = !isSidebarVisible.value;
-    }
+    // close the sidebar
+    router.replace({name: sidebarRoutes.value.name});
+    isSidebarVisible.value = !isSidebarVisible.value;
+    // cache the width of the sidebar when it is closed
+    sidebarWidth.value = <number>sidebarRef.value?.offsetWidth;
   }
 }
 </script>
@@ -41,9 +52,13 @@ const handleHide = (route: RouteRecordRaw) => {
       </div>
     </div>
   </div>
-  <div class="pane global-sider" v-if="isSidebarVisible">
+  <div
+      v-if="isSidebarVisible"
+      ref="sidebarRef"
+      :style="{width: `${sidebarWidth}px`}"
+      class="pane global-sider">
     <div>
-      <router-view />
+      <router-view/>
     </div>
   </div>
 </template>
