@@ -12,6 +12,7 @@
     "@tauri-apps/api": "^1.5.6",
     "element-plus": "^2.7.5",
     "vue": "^3.4.21",
+    "vue-multipane": "^0.9.5",
     "vue-router": "^4.3.3"
   },
   "devDependencies": {
