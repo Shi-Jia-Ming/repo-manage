@@ -25,6 +25,17 @@ const routes: Array<RouteRecordRaw> = [
         meta: { icon: "file.svg", iconActive: "file-active.svg" }
       }
     ]
+  },
+  {
+    path: "/tab",
+    name: "Tab",
+    children: [
+      {
+        path: "repository",
+        name: "Repository",
+        component: () => import("@/tab/Repository.vue"),
+      }
+    ]
   }
 ];
 

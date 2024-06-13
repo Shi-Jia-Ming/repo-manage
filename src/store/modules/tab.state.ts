@@ -33,6 +33,7 @@ export const tabStore: Module<any, TabInterface> = {
      * @param tab tab instance to add
      */
     add(state: TabStateInterface, tab: TabInterface) {
+      console.log("tab.add");
       // find if there is an existing tab
       const index: number = state.tabList.findIndex((item: TabInterface) => item.routePath === tab.routePath);
       // if there isn't an existing tab, create a new one
@@ -48,7 +49,7 @@ export const tabStore: Module<any, TabInterface> = {
         // push to the view
         router.push(tab.routePath)
           .then((res) => {
-            console.log("router push ==> ", tab.routePath, ": ", res?.message);
+            console.log("router push ==> ", tab.routePath, " successful: ", res?.message);
           }).catch((err) => {
             console.log("router push ==>", tab.routePath, "failed, error: ", err?.message);
         });
@@ -62,7 +63,7 @@ export const tabStore: Module<any, TabInterface> = {
         // push to the view
         router.push(tab.routePath)
           .then((res) => {
-            console.log("router push ==> ", tab.routePath, ": ", res?.message);
+            console.log("router push ==> ", tab.routePath, " successful: ", res?.message);
           }).catch((err) => {
           console.log("router push ==>", tab.routePath, "failed, error: ", err?.message);
         });
@@ -75,6 +76,7 @@ export const tabStore: Module<any, TabInterface> = {
      * @param tab tab instance to remove
      */
     remove(state: TabStateInterface, tab: TabInterface) {
+      console.log("tab/remove");
       // search if the tab exists
       const index: number = state.tabList.findIndex((item: TabInterface) => item.routePath === tab.routePath);
       const indexKeepAlive: number = state.keepAliveList.findIndex((tabName: string) => tabName === tab.routeName);
@@ -93,7 +95,7 @@ export const tabStore: Module<any, TabInterface> = {
           // push to the view
           router.push("/tab")
             .then((res) => {
-              console.log("router push ==> ", "/tab", ": ", res?.message);
+              console.log("router push ==> ", "/tab", " successful: ", res?.message);
             }).catch((err) => {
             console.log("router push ==>", "/tab", "failed, error: ", err?.message);
           });
