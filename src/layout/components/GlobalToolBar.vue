@@ -5,6 +5,14 @@ import { appWindow } from '@tauri-apps/api/window';
 
 <template>
   <div data-tauri-drag-region class="toolbar-container">
+    <div class="left-content">
+      <div class="app-icon">
+        <el-image src="/vite.svg" alt="" style="height: 20px; width: 20px;" data-tauri-drag-region/>
+      </div>
+      <div class="tool-list">
+
+      </div>
+    </div>
     <el-button-group size="large" class="btn-container">
       <el-button type="text" @click="appWindow.minimize()" class="min-btn">
         <template #default>
@@ -36,9 +44,16 @@ import { appWindow } from '@tauri-apps/api/window';
   height: 40px;
   width: 100%;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-content: end;
   background-color: #cdcdcd;
+}
+
+.app-icon {
+  height: 100%;
+  margin-left: 12px;
+  display: flex;
+  align-items: center;
 }
 
 .el-button {

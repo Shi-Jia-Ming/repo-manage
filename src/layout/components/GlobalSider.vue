@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import router from "@/router";
-import {computed, ComputedRef, onMounted, Ref, ref} from "vue";
-import {RouteRecordRaw} from "vue-router";
+import {onMounted, Ref, ref} from "vue";
 import {MultipaneResizer} from "vue-multipane/src";
+import Sider from "@/sider/Sider.vue";
+import sidebarList, {SidebarItem} from "@/sider/sidebar.list";
 
-// get options of the sidebar routes
-const sidebarRoutes: ComputedRef<RouteRecordRaw> = computed(() => {
-  return router.options.routes[1];
-});
+// current sidebar
+const currentSidebar: Ref<string> = ref<string>('');
 
 // is the sidebar visible
 const isSidebarVisible: Ref<Boolean> = ref(false);
@@ -24,19 +22,19 @@ onMounted(() => {
 })
 
 // handle hide sidebar
-const handleHide = (route: RouteRecordRaw) => {
+const handleHide = (sidebarItem: SidebarItem) => {
   if (!isSidebarVisible.value) {
     // open the sidebar
-    router.replace({name: route.name});
+    currentSidebar.value = sidebarItem.name;
     isSidebarVisible.value = !isSidebarVisible.value;
-  } else if (router.currentRoute.value.name !== route.name) {
+  } else if (currentSidebar.value !== sidebarItem.name) {
     // switch the sidebar
-    router.replace({name: route.name});
+    currentSidebar.value = sidebarItem.name;
     // cache the width of the sidebar when it is switched
     sidebarWidth.value = <number>sidebarRef.value?.offsetWidth;
-  } else if (router.currentRoute.value.name === route.name) {
+  } else if (currentSidebar.value === sidebarItem.name) {
     // close the sidebar
-    router.replace({name: sidebarRoutes.value.name});
+    currentSidebar.value = '';
     isSidebarVisible.value = !isSidebarVisible.value;
     // cache the width of the sidebar when it is closed
     sidebarWidth.value = <number>sidebarRef.value?.offsetWidth;
@@ -48,10 +46,12 @@ const handleHide = (route: RouteRecordRaw) => {
   <div class="sidebar-icon-list-container">
     <div class="sidebar-icon-list">
       <div
-          v-for="route in sidebarRoutes.children"
-          @click="handleHide(route)"
-          :class="route.name === router.currentRoute.value.name ? 'sidebar-icon-active-container' : 'sidebar-icon-container'">
-        <el-image :src="`/icons/${route.meta?.icon}`" alt="" class="sidebar-icon"/>
+          v-for="sidebarItem in sidebarList"
+          @click="handleHide(sidebarItem)"
+          class="sidebar-icon-container"
+          :style="{borderLeft: `solid 2px ${sidebarItem.name === currentSidebar ? '#73767a' : 'white'}`}"
+      >
+        <el-image :src="`/icons/${sidebarItem.icon}`" alt="" class="sidebar-icon"/>
       </div>
     </div>
   </div>
@@ -61,7 +61,7 @@ const handleHide = (route: RouteRecordRaw) => {
       :style="{width: `${sidebarWidth}px`}"
       class="pane global-sider">
     <div>
-      <router-view/>
+      <sider :current-component="currentSidebar"/>
     </div>
   </div>
   <multipane-resizer v-if="isSidebarVisible"/>
@@ -88,17 +88,6 @@ const handleHide = (route: RouteRecordRaw) => {
   display: flex;
   justify-content: center;
   align-content: center;
-  border-left: solid 2px white;
-  cursor: pointer;
-}
-
-.sidebar-icon-active-container {
-  width: 100%;
-  height: 45px;
-  display: flex;
-  justify-content: center;
-  align-content: center;
-  border-left: solid 2px #73767a;
   cursor: pointer;
 }
 
