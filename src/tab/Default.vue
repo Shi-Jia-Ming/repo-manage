@@ -3,13 +3,11 @@
 </script>
 
 <template>
-  <div class="repository-container">
-    Repository
-  </div>
+  <div class="default-container"></div>
 </template>
 
 <style scoped lang="scss">
-.repository-container {
+.default-container {
   height: 100%;
 }
 </style>

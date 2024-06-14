@@ -4,7 +4,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
     name: "Default",
-    redirect: "/sider",
+    redirect: "/tab",
   },
   {
     path: "/sider",
@@ -29,7 +29,13 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/tab",
     name: "Tab",
+    redirect: "/tab/default",
     children: [
+      {
+        path: "default",
+        name: "Default",
+        component: () => import("@/tab/Default.vue"),
+      },
       {
         path: "repository",
         name: "Repository",
