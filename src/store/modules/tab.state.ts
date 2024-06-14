@@ -106,7 +106,17 @@ export const tabStore: Module<any, TabInterface> = {
             state.keepAliveList.splice(indexKeepAlive, 1);
           }
           // push to the view
-          router.back();
+          const indexToShow: number = Math.max(index - 1, 0);
+          state.tabList.map((tabInstance: TabInterface) => {
+            tabInstance.active = false;
+          });
+          state.tabList[indexToShow].active = true;
+          router.push(state.tabList[indexToShow].routePath)
+            .then((res) => {
+              console.log("router push ==> ", state.tabList[indexToShow].routePath, " successful: ", res?.message);
+            }).catch((err) => {
+            console.log("router push ==>", state.tabList[indexToShow].routePath, "failed, error: ", err?.message);
+          });
         }
       } else {
         // the tab to delete is inactive
