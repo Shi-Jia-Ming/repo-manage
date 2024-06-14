@@ -15,7 +15,7 @@ const tabStore: ComputedRef<TabStateInterface> = computed(() => {
 const addTestTab = () => {
   addOrSwitchTab({
     tabName: "test",
-    routePath: "/tab/repository",
+    routePath: `/tab/repository/${Math.random()}`,
     routeName: "Repository",
     active: false
   });
@@ -24,7 +24,7 @@ const addTestTab = () => {
 const deleteTestTab = () => {
   removeTab({
     tabName: "test",
-    routePath: "/tab/repository",
+    routePath: "/tab/repository/hello",
     routeName: "Repository",
     active: false
   });
@@ -57,7 +57,7 @@ const removeTab = (tab: TabInterface) => {
       <div class="tab-content">
         <router-view v-slot="{ Component }">
           <keep-alive :include="tabStore.keepAliveList">
-            <component :key="router.currentRoute.value.name" :is="Component"/>
+            <component :key="router.currentRoute.value.fullPath" :is="Component"/>
           </keep-alive>
         </router-view>
         <el-button @click="addTestTab">
@@ -79,6 +79,8 @@ const removeTab = (tab: TabInterface) => {
 
 .tab-title-list {
   height: 35px;
+  display: flex;
+  flex-direction: row;
 }
 
 .tab-title {

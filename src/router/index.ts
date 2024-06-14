@@ -37,7 +37,7 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/tab/Default.vue"),
       },
       {
-        path: "repository",
+        path: "repository/:repoName",
         name: "Repository",
         component: () => import("@/tab/Repository.vue"),
       }
