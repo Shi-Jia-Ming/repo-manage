@@ -2,8 +2,9 @@
 import {Close} from "@element-plus/icons-vue";
 import {Store, useStore} from 'vuex';
 import router from "@/router";
-import {computed, ComputedRef} from "vue";
+import {computed, ComputedRef, Ref, ref} from "vue";
 import {TabInterface, TabStateInterface} from "@/store/modules/tab.state.ts";
+import 'animate.css'
 
 const store: Store<any> = useStore();
 
@@ -12,22 +13,19 @@ const tabStore: ComputedRef<TabStateInterface> = computed(() => {
   return store.state.tab;
 });
 
+const ids: Ref<number> = ref(1);
+
 const addTestTab = () => {
   addOrSwitchTab({
+    id: ids.value,
     tabName: "test",
     routePath: `/tab/repository/${Math.random()}`,
     routeName: "Repository",
     active: false
   });
-}
 
-const deleteTestTab = () => {
-  removeTab({
-    tabName: "test",
-    routePath: "/tab/repository/hello",
-    routeName: "Repository",
-    active: false
-  });
+  ids.value++;
+  console.log(ids.value);
 }
 
 // switch or add a tab instance
@@ -46,11 +44,13 @@ const removeTab = (tab: TabInterface) => {
       <div class="tab-title-list">
         <div v-for="(tabInstance, index) in tabStore.tabList"
              :key="index"
-             class="tab-title"
+             class="tab-title animate__animated animate__fadeIn"
+             :id="tabInstance.id.toString()"
+             :style="{backgroundColor: tabInstance.active ? '#ffffff' : '#f8f8f8', borderTop: tabInstance.active ? 'solid 2px #409eff' : 'solid 2px #f8f8f8'}"
         >
           <div class="tab-title-content" @click="addOrSwitchTab(tabInstance)">{{ tabInstance.tabName }}</div>
           <el-icon size="large" class="tab-close-icon" @click="removeTab(tabInstance)">
-            <Close />
+            <close/>
           </el-icon>
         </div>
       </div>
@@ -62,9 +62,6 @@ const removeTab = (tab: TabInterface) => {
         </router-view>
         <el-button @click="addTestTab">
           添加测试tab
-        </el-button>
-        <el-button @click="deleteTestTab">
-          删除测试tab
         </el-button>
       </div>
     </div>
@@ -81,6 +78,23 @@ const removeTab = (tab: TabInterface) => {
   height: 35px;
   display: flex;
   flex-direction: row;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background-color: #f8f8f8;
+}
+
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.5s ease;
+}
+
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
 }
 
 .tab-title {
@@ -92,8 +106,8 @@ const removeTab = (tab: TabInterface) => {
   align-content: center;
   justify-content: space-between;
 
-  background-color: #73767a;
   padding: 0 5px;
+  z-index: 100;
 }
 
 .tab-title-content {
@@ -105,7 +119,12 @@ const removeTab = (tab: TabInterface) => {
 }
 
 .tab-close-icon {
+  border-radius: 50%;
   align-self: center;
+}
+
+.tab-close-icon:hover {
+  background-color: #d9d9d9;
 }
 
 .tab-content {

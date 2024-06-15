@@ -16,5 +16,6 @@ const repoName: Ref<UnwrapRef<string | RouteParamValue[]>> = ref(route.params.re
 <style scoped lang="scss">
 .repository-container {
   height: 100%;
+  background-color: #ffffff;
 }
 </style>

@@ -80,6 +80,8 @@ const handleHide = (sidebarItem: SidebarItem) => {
   display: flex;
   flex-direction: column;
   align-content: center;
+  background-color: #eeeeee;
+  border-right: solid 1px #e5e5e5;
 }
 
 .sidebar-icon-container {
@@ -105,6 +107,7 @@ const handleHide = (sidebarItem: SidebarItem) => {
   margin: 0 2px 0 0;
   left: 0;
   position: relative;
+  background-color: #f1f3f5;
 
   &:before {
     display: block;

@@ -9,7 +9,6 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/sider",
     name: "Sider",
-    // redirect: "/sider/repository",
     component:  () => import("@/sider/Sider.vue"),
     children: [
       {

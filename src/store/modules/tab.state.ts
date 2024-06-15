@@ -2,6 +2,7 @@ import { Module } from "vuex";
 import router from "@/router";
 
 export interface TabInterface {
+  id: number,
   tabName: string,
   routePath: string,
   routeName: string,
