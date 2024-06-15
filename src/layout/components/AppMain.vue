@@ -20,7 +20,6 @@ const currentActiveTab: Ref<TabInterface | undefined> = ref(tabStore.value.tabLi
 const addTestTab = () => {
   addOrSwitchTab({
     id: ids.value,
-    index: ids.value,
     tabName: "test",
     routePath: `/tab/repository/${Math.random()}`,
     routeName: "Repository",

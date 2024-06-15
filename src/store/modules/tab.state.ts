@@ -3,7 +3,7 @@ import router from "@/router";
 
 export interface TabInterface {
   id: number,
-  index: number,
+  index?: number,
   tabName: string,
   routePath: string,
   routeName: string,
@@ -47,6 +47,8 @@ export const tabStore: Module<any, TabInterface> = {
         });
         state.tabList.push(tab);
         tab.active = true;
+        // start from 0
+        tab.index = state.tabList.length - 1;
 
         // push to the view
         router.push(tab.routePath)
@@ -107,6 +109,9 @@ export const tabStore: Module<any, TabInterface> = {
           if (indexKeepAlive !== -1) {
             state.keepAliveList.splice(indexKeepAlive, 1);
           }
+          for (let i = tab.index!; i < state.tabList.length; i++) {
+            state.tabList[i].index! -= 1;
+          }
           // push to the view
           const indexToShow: number = Math.max(index - 1, 0);
           state.tabList.map((tabInstance: TabInterface) => {
@@ -125,6 +130,9 @@ export const tabStore: Module<any, TabInterface> = {
         state.tabList.splice(index, 1);
         if (indexKeepAlive !== -1) {
           state.keepAliveList.splice(indexKeepAlive, 1);
+        }
+        for (let i = tab.index!; i < state.tabList.length; i++) {
+          state.tabList[i].index! -= 1;
         }
       }
     }
