@@ -6,6 +6,8 @@ import sidebarList, {SidebarItem} from "@/sider/sidebar.list";
 
 // current sidebar
 const currentSidebar: Ref<string> = ref<string>('');
+// current sidebar index
+const currentSidebarIndex: Ref<number> = ref(0);
 
 // is the sidebar visible
 const isSidebarVisible: Ref<Boolean> = ref(false);
@@ -22,19 +24,22 @@ onMounted(() => {
 })
 
 // handle hide sidebar
-const handleHide = (sidebarItem: SidebarItem) => {
+const handleSwitch = (sidebarItem: SidebarItem, index: number) => {
   if (!isSidebarVisible.value) {
     // open the sidebar
     currentSidebar.value = sidebarItem.name;
+    currentSidebarIndex.value = index;
     isSidebarVisible.value = !isSidebarVisible.value;
   } else if (currentSidebar.value !== sidebarItem.name) {
     // switch the sidebar
     currentSidebar.value = sidebarItem.name;
+    currentSidebarIndex.value = index;
     // cache the width of the sidebar when it is switched
     sidebarWidth.value = <number>sidebarRef.value?.offsetWidth;
   } else if (currentSidebar.value === sidebarItem.name) {
     // close the sidebar
     currentSidebar.value = '';
+    currentSidebarIndex.value = -1;
     isSidebarVisible.value = !isSidebarVisible.value;
     // cache the width of the sidebar when it is closed
     sidebarWidth.value = <number>sidebarRef.value?.offsetWidth;
@@ -46,13 +51,17 @@ const handleHide = (sidebarItem: SidebarItem) => {
   <div class="sidebar-icon-list-container">
     <div class="sidebar-icon-list">
       <div
-          v-for="sidebarItem in sidebarList"
-          @click="handleHide(sidebarItem)"
+          v-for="(sidebarItem, index) in sidebarList"
+          @click="handleSwitch(sidebarItem, index)"
           class="sidebar-icon-container"
-          :style="{borderLeft: `solid 2px ${sidebarItem.name === currentSidebar ? '#73767a' : 'white'}`}"
       >
         <el-image :src="`/icons/${sidebarItem.icon}`" alt="" class="sidebar-icon"/>
       </div>
+
+      <div
+          v-if="isSidebarVisible"
+          :style="{ 'top': `${currentSidebarIndex * 45}px` }"
+          class="sidebar-slide-block"/>
     </div>
   </div>
   <div
@@ -91,6 +100,17 @@ const handleHide = (sidebarItem: SidebarItem) => {
   justify-content: center;
   align-content: center;
   cursor: pointer;
+}
+
+.sidebar-slide-block {
+  width: 2px;
+  height: 45px;
+  background-color: #73767a;
+  position: absolute;
+  cursor: pointer;
+
+  z-index: 1;
+  transition: all .4s;
 }
 
 .sidebar-icon {

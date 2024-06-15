@@ -3,6 +3,7 @@ import router from "@/router";
 
 export interface TabInterface {
   id: number,
+  index: number,
   tabName: string,
   routePath: string,
   routeName: string,

@@ -13,11 +13,14 @@ const tabStore: ComputedRef<TabStateInterface> = computed(() => {
   return store.state.tab;
 });
 
-const ids: Ref<number> = ref(1);
+const ids: Ref<number> = ref(0);
+
+const currentActiveTab: Ref<TabInterface | undefined> = ref(tabStore.value.tabList[0]);
 
 const addTestTab = () => {
   addOrSwitchTab({
     id: ids.value,
+    index: ids.value,
     tabName: "test",
     routePath: `/tab/repository/${Math.random()}`,
     routeName: "Repository",
@@ -31,10 +34,12 @@ const addTestTab = () => {
 // switch or add a tab instance
 const addOrSwitchTab = (tab: TabInterface) => {
   store.commit("tab/add", tab);
+  currentActiveTab.value = tab;
 };
 
 const removeTab = (tab: TabInterface) => {
   store.commit("tab/remove", tab);
+  currentActiveTab.value = tabStore.value.tabList.find((tabInstance) => tabInstance.active);
 }
 </script>
 
@@ -46,13 +51,18 @@ const removeTab = (tab: TabInterface) => {
              :key="index"
              class="tab-title animate__animated animate__fadeIn"
              :id="tabInstance.id.toString()"
-             :style="{backgroundColor: tabInstance.active ? '#ffffff' : '#f8f8f8', borderTop: tabInstance.active ? 'solid 2px #409eff' : 'solid 2px #f8f8f8'}"
+             :style="{backgroundColor: tabInstance.active ? '#ffffff' : '#f8f8f8', borderTop: tabInstance.active ? 'solid 2px #f8f8f8' : 'solid 2px #f8f8f8'}"
         >
           <div class="tab-title-content" @click="addOrSwitchTab(tabInstance)">{{ tabInstance.tabName }}</div>
           <el-icon size="large" class="tab-close-icon" @click="removeTab(tabInstance)">
             <close/>
           </el-icon>
         </div>
+        <div
+            :style="{'left': `${currentActiveTab.index * 120}px`}"
+            v-if="currentActiveTab?.index !== undefined"
+            class="title-slide-block"
+        />
       </div>
       <div class="tab-content">
         <router-view v-slot="{ Component }">
@@ -86,6 +96,17 @@ const removeTab = (tab: TabInterface) => {
   background-color: #f8f8f8;
 }
 
+.title-slide-block {
+  width: 120px;
+  height: 2px;
+  background-color: #409eff;
+  position: absolute;
+  cursor: pointer;
+
+  z-index: 1;
+  transition: all .5s;
+}
+
 .list-enter-active,
 .list-leave-active {
   transition: all 0.5s ease;
@@ -107,7 +128,6 @@ const removeTab = (tab: TabInterface) => {
   justify-content: space-between;
 
   padding: 0 5px;
-  z-index: 100;
 }
 
 .tab-title-content {
