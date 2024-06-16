@@ -26,7 +26,7 @@ const slideBlockOffsetX: Ref<UnwrapRef<number | undefined>> = ref(scrollerBarRef
 
 // the position of slide block
 const slideBlockPosition: ComputedRef<number> = computed(() => {
-  return currentActiveTab.value?.index! * 120 - (slideBlockOffsetX.value ? slideBlockOffsetX.value : 0);
+  return currentActiveTab.value?.index! * 121 - (slideBlockOffsetX.value ? slideBlockOffsetX.value : 0);
 });
 
 //whether the tab switch animation open
@@ -158,6 +158,8 @@ const handleScroll = ({scrollLeft}: {scrollLeft: number}) => {
 
   padding: 0 5px;
   flex-shrink: 0;
+
+  border-right: solid 1px #b9b9b9;
 }
 
 .tab-title-content {
