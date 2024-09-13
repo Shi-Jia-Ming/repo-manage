@@ -10,8 +10,10 @@
   },
   "dependencies": {
     "@tauri-apps/api": "^1.5.6",
+    "@types/splitpanes": "^2.2.6",
     "animate.css": "^4.1.1",
     "element-plus": "^2.7.5",
+    "splitpanes": "^3.1.5",
     "vue": "^3.4.21",
     "vue-multipane": "^0.9.5",
     "vue-router": "^4.3.3",
