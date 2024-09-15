@@ -23,6 +23,7 @@
       "@/*": ["./src/*"],
       "vuex": ["./node_modules/vuex/types"]
     },
+    "allowSyntheticDefaultImports": true
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue"],
   "references": [{ "path": "./tsconfig.node.json" }]

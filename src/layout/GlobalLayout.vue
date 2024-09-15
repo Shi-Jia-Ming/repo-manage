@@ -3,7 +3,7 @@ import GlobalToolBar from "./components/GlobalToolBar.vue";
 import GlobalSider from "./components/GlobalSider.vue";
 import GlobalStatusBar from "@/layout/components/GlobalStatusBar.vue";
 import AppMain from "@/layout/components/AppMain.vue";
-import { Multipane } from "vue-multipane/src";
+import {Multipane} from "vue-multipane/src";
 import TranslateSider from "@/layout/components/TranslateSider.vue";
 import {Ref, ref} from "vue";
 
@@ -12,18 +12,14 @@ const isTranslateSiderVisible: Ref<boolean> = ref(true);
 
 <template>
   <div class="global-layout">
-    <global-tool-bar v-model:is-translate-sider-visible="isTranslateSiderVisible" />
+    <global-tool-bar v-model:is-translate-sider-visible="isTranslateSiderVisible"/>
     <multipane layout="vertical" class="custom-resizer main-layout">
       <!-- TODO animation of collapse and expand -->
-      <transition name="fade">
-        <global-sider />
-      </transition>
-      <app-main />
-      <transition name="fade">
-        <translate-sider v-model:is-translate-sider-visible="isTranslateSiderVisible" />
-      </transition>
+      <global-sider/>
+      <app-main/>
+      <translate-sider v-model:is-translate-sider-visible="isTranslateSiderVisible"/>
     </multipane>
-    <global-status-bar />
+    <global-status-bar/>
   </div>
 </template>
 

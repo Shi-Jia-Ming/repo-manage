@@ -2,7 +2,8 @@
 import {Close} from "@element-plus/icons-vue";
 import {Store, useStore} from 'vuex';
 import router from "@/router";
-import {computed, ComputedRef, Ref, ref, UnwrapRef} from "vue";
+import {computed, ComputedRef, onMounted, Ref, ref, UnwrapRef} from "vue";
+import Sortable from "sortablejs";
 import {TabInterface, TabStateInterface} from "@/store/modules/tab.state.ts";
 import 'animate.css'
 
@@ -32,12 +33,33 @@ const slideBlockPosition: ComputedRef<number> = computed(() => {
 //whether the tab switch animation open
 const tabSwitchAnimation: Ref<boolean> = ref(false);
 
+const tabList: ComputedRef<TabInterface[]> = computed(() => {
+  return tabStore.value.tabList;
+});
+
+onMounted(() => {
+  tabDrag();
+})
+
 const addTestTab = () => {
   addOrSwitchTab({
     id: ids.value,
     tabName: "test",
     routePath: `/tab/repository/${Math.random()}`,
     routeName: "Repository",
+    active: false
+  });
+
+  ids.value++;
+  console.log(ids.value);
+}
+
+const addPdfTab = () => {
+  addOrSwitchTab({
+    id: ids.value,
+    tabName: "PDF",
+    routePath: `/tab/pdf`,
+    routeName: "PdfView",
     active: false
   });
 
@@ -54,10 +76,26 @@ const addOrSwitchTab = (tab: TabInterface) => {
 const removeTab = (tab: TabInterface) => {
   store.commit("tab/remove", tab);
   currentActiveTab.value = tabStore.value.tabList.find((tabInstance) => tabInstance.active);
-}
+};
 
 const handleScroll = ({scrollLeft}: {scrollLeft: number}) => {
   slideBlockOffsetX.value = scrollLeft;
+};
+
+const tabDrag = () => {
+  const element: HTMLElement = document.querySelector('.tab-title-list')!;
+
+  new Sortable(element, {
+    animation: 150,
+    ghostClass: 'blue-background-class',
+    onEnd({ newIndex, oldIndex}) {
+      // TODO drag tab
+      const dragTab = tabList.value.splice(oldIndex!, 1)[0];
+      tabList.value.splice(newIndex!, 0, dragTab);
+      console.log(tabList.value);
+      console.log(newIndex, oldIndex);
+    }
+  })
 }
 </script>
 
@@ -66,7 +104,7 @@ const handleScroll = ({scrollLeft}: {scrollLeft: number}) => {
     <div class="main-view">
       <el-scrollbar ref="scrollerBarRef" @scroll="handleScroll">
         <div class="tab-title-list">
-          <div v-for="(tabInstance, index) in tabStore.tabList"
+          <div v-for="(tabInstance, index) in tabList"
                :key="index"
                class="tab-title animate__animated animate__fadeIn"
                :id="tabInstance.id.toString()"
@@ -91,10 +129,15 @@ const handleScroll = ({scrollLeft}: {scrollLeft: number}) => {
             <component :key="router.currentRoute.value.fullPath" :is="Component"/>
           </keep-alive>
         </router-view>
-        <el-button @click="addTestTab">
-          添加测试tab
-        </el-button>
-        <el-switch v-model="tabSwitchAnimation" active-text="开启" inactive-text="关闭"/>
+        <div class="test-div">
+          <el-button @click="addTestTab">
+            添加测试tab
+          </el-button>
+          <el-button @click="addPdfTab">
+            添加 PDF tab
+          </el-button>
+          <el-switch v-model="tabSwitchAnimation" active-text="开启" inactive-text="关闭"/>
+        </div>
       </div>
     </div>
   </div>
@@ -181,5 +224,14 @@ const handleScroll = ({scrollLeft}: {scrollLeft: number}) => {
 
 .tab-content {
   height: calc(100vh - 135px);
+}
+
+.test-div {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  gap: 20px;
+  z-index: 3;
+  bottom: 0;
 }
 </style>

@@ -26,6 +26,6 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .translate-sider {
-  min-width: 200px;
+  min-width: 400px;
 }
 </style>

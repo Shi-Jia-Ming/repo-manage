@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {defineModel, onMounted, Ref, ref} from "vue";
+import {onMounted, Ref, ref} from "vue";
 import {MultipaneResizer} from "vue-multipane/src";
 import Sider from "@/sider/Sider.vue";
 import sidebarList, {SidebarItem} from "@/sider/sidebar.list";

@@ -10,6 +10,7 @@ const routes: Array<RouteRecordRaw> = [
     path: "/sider",
     name: "Sider",
     component:  () => import("@/sider/Sider.vue"),
+    // TODO unused child components
     children: [
       {
         path: "repository",
@@ -39,6 +40,11 @@ const routes: Array<RouteRecordRaw> = [
         path: "repository/:repoName",
         name: "Repository",
         component: () => import("@/tab/Repository.vue"),
+      },
+      {
+        path: "pdf",
+        name: "PdfView",
+        component: () => import("@/tab/PdfView.vue"),
       }
     ]
   }
