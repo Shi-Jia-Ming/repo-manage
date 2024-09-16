@@ -50,10 +50,6 @@ const scrollToPage = () => {
   pdfScrollbar.value!.setScrollTop(display.canvasHeight * (pageNumber.value - 1));
 };
 
-const scroll = ({ scrollTop }: {scrollTop: number}) => {
-  pageNumber.value = Math.round(scrollTop / display.canvasHeight) + 1;
-};
-
 const handleZoomIn = () => {
   renderScale.value += 0.1;
   display.displayPdf(pdfUrl.value, pdfContainer.value!, true, 4, 'page', renderScale.value, true, false, () => {});
@@ -96,17 +92,7 @@ const handlePdfSiderCollapse = () => {
       </div>
     </div>
     <div class="pdf-main">
-      <div class="pdf-sider" v-show="isPdfSiderVisible">
-        <el-scrollbar>
-          <div class="pdf-preview" ref="pdfPreviewer"/>
-        </el-scrollbar>
-      </div>
-      <el-scrollbar
-          class="pdf-scrollbar-container"
-          ref="pdfScrollbar"
-          @scroll="scroll">
-        <div class="pdf-container" ref="pdfContainer"/>
-      </el-scrollbar>
+      <iframe id="pdf" style="display: none;" src="pdf.js/web/viewer.html?file="/>
     </div>
   </div>
 </template>

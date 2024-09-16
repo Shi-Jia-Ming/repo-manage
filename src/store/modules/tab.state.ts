@@ -1,7 +1,8 @@
 import { Module } from "vuex";
 import router from "@/router";
+import {DataInterface} from "@/store";
 
-export interface TabInterface {
+export interface TabInterface extends DataInterface {
   id: number,
   index?: number,
   tabName: string,
@@ -21,7 +22,7 @@ export interface TabStateInterface {
   keepAliveList: Array<string>
 }
 
-export const tabStore: Module<any, TabInterface> = {
+export const tabStore: Module<any, DataInterface> = {
   namespaced: true,
   state: {
     tabList: new Array<TabInterface>(),

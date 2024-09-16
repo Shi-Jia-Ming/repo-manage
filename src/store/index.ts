@@ -1,10 +1,14 @@
-import { createStore } from 'vuex';
+import {createStore, Store} from 'vuex';
 import {tabStore} from "./modules/tab.state.ts";
+import {fileStore} from "@/store/modules/file.state.ts";
 
-const store = createStore({
+export interface DataInterface {}
+
+const store: Store<DataInterface> = createStore({
   modules: {
-    tab: tabStore
-  }
+    tab: tabStore,
+    file: fileStore
+  },
 });
 
 export default store;

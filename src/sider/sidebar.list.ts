@@ -9,20 +9,12 @@ export interface SidebarItem {
 
 const sidebarList: SidebarItem[] = [
   {
-    title: "Repository",
-    name: "repository",
+    title: "Document",
+    name: "document",
     keymap: "",
     icon: "file.svg",
     iconActive: "file-active.svg",
-    component: () => import("./components/Repository.vue")
-  },
-  {
-    title: "HelloWorld",
-    name: "hello-world",
-    keymap: "",
-    icon: "file.svg",
-    iconActive: "file-active.svg",
-    component: () => import("./components/HelloWorld.vue")
+    component: () => import("@/sider/components/Document.vue")
   }
 ];
 
