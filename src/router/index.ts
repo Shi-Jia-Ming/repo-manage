@@ -42,7 +42,7 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/tab/Repository.vue"),
       },
       {
-        path: "pdf",
+        path: "pdf/:pdfName",
         name: "PdfView",
         component: () => import("@/tab/PdfView.vue"),
       }

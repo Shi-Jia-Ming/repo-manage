@@ -1,98 +1,42 @@
 <script setup lang="ts">
-import {onMounted, ref, Ref, watch} from "vue";
-import {ArrowLeft, ArrowRight} from "@element-plus/icons-vue";
-import {PdfDisplay} from "@/utils/pdf.display.ts";
-import {ElScrollbar} from "element-plus";
+import {onMounted, ref, Ref, UnwrapRef} from "vue";
+import {RouteLocationNormalized, RouteParamValue, useRoute} from "vue-router";
+import {invoke} from "@tauri-apps/api/tauri";
+import {appDataDir} from "@tauri-apps/api/path";
 
-const pdfUrl: Ref<string> = ref('/micromodelicaspec1.pdf');
+const route: RouteLocationNormalized = useRoute();
 
-const pdfContainer: Ref<HTMLElement | null> = ref(null);
-const pdfPreviewer: Ref<HTMLElement | null> = ref(null);
+const pdfName: Ref<UnwrapRef<string | RouteParamValue[]>> = ref(route.params.pdfName);
 
-const pdfScrollbar = ref<InstanceType<typeof ElScrollbar>>();
+const pdfUrl: Ref<string> = ref('');
 
-const pageNumber: Ref<number> = ref(1);
-
-const renderScale = ref(1.1);
-
-const display = new PdfDisplay();
-
-// is the pdf sider visible
-const isPdfSiderVisible: Ref<boolean> = ref(true);
-
-onMounted(() => {
-  display.displayPdf(pdfUrl.value, pdfContainer.value!, true, 4, 'page', renderScale.value, true, false, () => {});
-  display.displayPdf(pdfUrl.value, pdfPreviewer.value!, true, 4, 'page', 0.25, false, true, (page: number) => {
-    pageNumber.value = page;
-    scrollToPage();
-  });
+onMounted(async () => {
+   try {
+     const appDataDirPath = await appDataDir();
+     pdfUrl.value = await invoke('load_file', {filePath: appDataDirPath + pdfName.value});
+     pdfUrl.value = URL.createObjectURL(base64ToBlob(pdfUrl.value));
+   } catch (e) {
+     console.error(e);
+   }
 })
 
-watch(pageNumber, (value) => {
-  if (value < 1) {
-    pageNumber.value = 1;
-  } else if (value > display.maxPageNumber) {
-    pageNumber.value = display.maxPageNumber;
+function base64ToBlob(code: string) {
+  code = code.replace(/[\n\r]/g, '')
+  // atob() 方法用于解码使用 base-64 编码的字符串。
+  const raw = window.atob(code)
+  const rawLength = raw.length
+  const uInt8Array = new Uint8Array(rawLength)
+  for (let i = 0; i < rawLength; ++i) {
+    uInt8Array[i] = raw.charCodeAt(i)
   }
-});
-
-const handleNextPage = () => {
-  pageNumber.value++;
-  scrollToPage();
-};
-
-const handlePreviousPage = () => {
-  pageNumber.value--;
-  scrollToPage();
-};
-
-const scrollToPage = () => {
-  pdfScrollbar.value!.setScrollTop(display.canvasHeight * (pageNumber.value - 1));
-};
-
-const handleZoomIn = () => {
-  renderScale.value += 0.1;
-  display.displayPdf(pdfUrl.value, pdfContainer.value!, true, 4, 'page', renderScale.value, true, false, () => {});
-};
-
-const handleZoomOut = () => {
-  renderScale.value -= 0.1;
-  display.displayPdf(pdfUrl.value, pdfContainer.value!, true, 4, 'page', renderScale.value, true, false, () => {});
-};
-
-const handlePdfSiderCollapse = () => {
-  isPdfSiderVisible.value = !isPdfSiderVisible.value;
-};
+  return new Blob([uInt8Array], { type: 'application/pdf' })
+}
 </script>
 
 <template>
   <div class="pdf-view">
-    <div class="pdf-toolbar">
-      <el-button type="text" icon="el-icon-upload2" @click="handlePdfSiderCollapse">Sidebar</el-button>
-
-      <div class="resizing">
-        <el-button type="text" @click="handleZoomIn">Zoom In</el-button>
-        <el-button type="text" @click="handleZoomOut">Zoom Out</el-button>
-      </div>
-
-      <div class="page-group">
-        <el-button type="text" @click="handlePreviousPage">
-          <el-icon class="el-icon--left">
-            <arrow-left/>
-          </el-icon>
-          Previous
-        </el-button>
-        <el-input v-model="pageNumber" type="number" size="small" style="width: 50px;"/>
-        <el-button type="text" @click="handleNextPage">
-          Next
-          <el-icon class="el-icon--right">
-            <arrow-right/>
-          </el-icon>
-        </el-button>
-      </div>
-    </div>
     <div class="pdf-main">
-      <iframe id="pdf" style="display: none;" src="pdf.js/web/viewer.html?file="/>
+      <iframe id="pdf" :src="`/pdf.js/web/viewer.html?file=${pdfUrl}`" style="width: 100%; height: 100%;"/>
     </div>
   </div>
 </template>
