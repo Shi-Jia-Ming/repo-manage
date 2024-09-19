@@ -5,25 +5,52 @@ import GlobalStatusBar from "@/layout/components/GlobalStatusBar.vue";
 import AppMain from "@/layout/components/AppMain.vue";
 import {Multipane} from "vue-multipane/src";
 import TranslateSider from "@/layout/components/TranslateSider.vue";
+import {Splitpanes, Pane} from "splitpanes";
+import "splitpanes/dist/splitpanes.css";
 import {Ref, ref} from "vue";
+import GlobalSidebarIcons from "@/layout/components/GlobalSidebarIcons.vue";
+import Sider from "@/sider/Sider.vue";
 
 const isTranslateSiderVisible: Ref<boolean> = ref(false);
+
+// current sidebar
+const currentSidebar: Ref<string> = ref<string>('');
+
+// is the sidebar visible
+const isSidebarVisible: Ref<Boolean> = ref(false);
 </script>
 
 <template>
   <div class="global-layout">
     <global-tool-bar v-model:is-translate-sider-visible="isTranslateSiderVisible"/>
-    <multipane layout="vertical" class="custom-resizer main-layout">
-      <!-- TODO animation of collapse and expand -->
-      <global-sider/>
-      <app-main/>
-      <translate-sider v-model:is-translate-sider-visible="isTranslateSiderVisible"/>
-    </multipane>
+    <div style="display: flex; flex-direction: row; height: 100%; width: 100%;">
+      <global-sidebar-icons
+          v-model:current-sidebar="currentSidebar"
+          v-model:is-sidebar-visible="isSidebarVisible"
+      />
+      <splitpanes layout="vertical" class="main-layout default-theme">
+        <!-- TODO animation of collapse and expand -->
+        <pane v-if="isSidebarVisible" class="global-sidebar" min-size="10" max-size="30">
+          <sider :current-component="currentSidebar"/>
+        </pane>
+        <pane>
+          <app-main/>
+        </pane>
+        <pane v-if="isTranslateSiderVisible">
+          <translate-sider v-model:is-translate-sider-visible="isTranslateSiderVisible"/>
+        </pane>
+      </splitpanes>
+    </div>
     <global-status-bar/>
   </div>
 </template>
 
 <style scoped lang="scss">
+.global-sider {
+  min-width: 100px;
+  background-color: #f1f3f5;
+}
+
 .global-layout {
   width: 100%;
   height: 100%;
@@ -42,4 +69,25 @@ const isTranslateSiderVisible: Ref<boolean> = ref(false);
 .fade_enter-active, .fade_leave-active {
   transition: opacity 0.5s;
 }
+
+pane {
+  height: 100%;
+}
+
+.splitpanes {background-color: #f8f8f8;}
+
+.splitpanes__splitter {background-color: #ccc;position: relative;}
+.splitpanes__splitter:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  transition: opacity 0.4s;
+  background-color: rgba(255, 0, 0, 0.3);
+  opacity: 0;
+  z-index: 1;
+}
+.splitpanes__splitter:hover:before {opacity: 1;}
+.splitpanes--vertical > .splitpanes__splitter:before {left: -30px;right: -30px;height: 100%;}
+.splitpanes--horizontal > .splitpanes__splitter:before {top: -30px;bottom: -30px;width: 100%;}
 </style>

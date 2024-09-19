@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import GlobalLayout from "@/layout/GlobalLayout.vue";
+import "@/style/global.css";
 </script>
 
 <template>

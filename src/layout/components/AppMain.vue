@@ -93,7 +93,7 @@ const tabDrag = () => {
 </script>
 
 <template>
-  <div :style="{ flexGrow: 1 }" class="pane app-main">
+  <div :style="{ flexGrow: 1 }" class="app-main">
     <div class="main-view">
       <el-scrollbar ref="scrollerBarRef" @scroll="handleScroll" class="tab-scroller">
         <div class="tab-title-list">
@@ -129,6 +129,7 @@ const tabDrag = () => {
 
 <style scoped lang="scss">
 .app-main {
+  height: 100%;
   min-width: 200px;
   background-color: #f1f3f5;
 }

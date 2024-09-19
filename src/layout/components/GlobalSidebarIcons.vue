@@ -1,27 +1,18 @@
 <script setup lang="ts">
-import {onMounted, Ref, ref} from "vue";
-import {MultipaneResizer} from "vue-multipane/src";
-import Sider from "@/sider/Sider.vue";
-import sidebarList, {SidebarItem} from "@/sider/sidebar.list";
+import sidebarList, {SidebarItem} from "@/sider/sidebar.list.ts";
+import {ModelRef, Ref, ref} from "vue";
 
-// current sidebar
-const currentSidebar: Ref<string> = ref<string>('');
+// // current sidebar index
+// const currentSidebarIndex: ModelRef<number> = defineModel<number, string>('currentSidebarIndex');
+//
+// is the sidebar visible
+const isSidebarVisible: ModelRef<boolean> = defineModel<boolean, string>('isSidebarVisible');
+
 // current sidebar index
 const currentSidebarIndex: Ref<number> = ref(0);
 
-// is the sidebar visible
-const isSidebarVisible: Ref<Boolean> = ref(false);
-
-// the sidebar ref
-const sidebarRef: Ref<HTMLElement | null> = ref(null);
-
-// cache the width of the sidebar
-const sidebarWidth: Ref<number> = ref(50);
-
-onMounted(() => {
-  // cache the width of the sidebar on mounted
-  sidebarWidth.value = <number>sidebarRef.value?.offsetWidth;
-})
+// current sidebar
+const currentSidebar: ModelRef<string> = defineModel<string, string>('currentSidebar');
 
 // handle hide sidebar
 const handleSwitch = (sidebarItem: SidebarItem, index: number) => {
@@ -34,15 +25,11 @@ const handleSwitch = (sidebarItem: SidebarItem, index: number) => {
     // switch the sidebar
     currentSidebar.value = sidebarItem.name;
     currentSidebarIndex.value = index;
-    // cache the width of the sidebar when it is switched
-    sidebarWidth.value = <number>sidebarRef.value?.offsetWidth;
   } else if (currentSidebar.value === sidebarItem.name) {
     // close the sidebar
     currentSidebar.value = '';
     currentSidebarIndex.value = -1;
     isSidebarVisible.value = !isSidebarVisible.value;
-    // cache the width of the sidebar when it is closed
-    sidebarWidth.value = <number>sidebarRef.value?.offsetWidth;
   }
 }
 </script>
@@ -60,27 +47,13 @@ const handleSwitch = (sidebarItem: SidebarItem, index: number) => {
 
       <div
           v-if="isSidebarVisible"
-          :style="{ 'top': `${currentSidebarIndex * 45}px` }"
+          :style="{ 'top': `(${currentSidebarIndex * 45})px` }"
           class="sidebar-slide-block"/>
-    </div>
-  </div>
-  <div
-      v-if="isSidebarVisible"
-      ref="sidebarRef"
-      :style="{width: `${sidebarWidth}px`}"
-      class="global-sider">
-    <div>
-      <sider :current-component="currentSidebar"/>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
-.global-sider {
-  min-width: 100px;
-  background-color: #f1f3f5;
-}
-
 .sidebar-icon-list-container {
   width: 50px;
   max-width: 50px;
