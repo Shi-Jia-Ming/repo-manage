@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {onMounted, ref, Ref, UnwrapRef} from "vue";
+import {inject, onMounted, onUnmounted, ref, Ref, UnwrapRef} from "vue";
 import {RouteLocationNormalized, RouteParamValue, useRoute} from "vue-router";
 import {invoke} from "@tauri-apps/api/tauri";
 import {appDataDir} from "@tauri-apps/api/path";
@@ -11,6 +11,10 @@ const pdfName: Ref<UnwrapRef<string | RouteParamValue[]>> = ref(route.params.pdf
 const appDataDirPath: Ref<string> = ref('');
 
 const pdfUrl: Ref<string> = ref('');
+
+const pdfIframe: Ref<HTMLElement | null> = ref(null);
+
+const {wordToTranslate, updateWordToTranslate} = inject<{wordToTranslate: Ref<string>, updateWordToTranslate: (word: string) => void},string>('wordToTranslate');
 
 onMounted(async () => {
    try {
@@ -24,6 +28,22 @@ onMounted(async () => {
    window.addEventListener('message', function (event) {
     console.log('received message: ', event.data);
    }, false);
+
+  console.log(pdfIframe.value);
+
+  if (pdfIframe.value) {
+    pdfIframe.value.contentWindow.addEventListener('mouseup', (_) => {
+      const selectedText = pdfIframe.value.contentWindow.getSelection().toString();
+      if (selectedText !== '')
+        updateWordToTranslate(selectedText);
+    });
+  }
+})
+
+onUnmounted(() => {
+  pdfIframe.value?.contentWindow.removeEventListener('mouseup', (_) => {
+    console.log('remove event listener');
+  });
 })
 
 function base64ToBlob(code: string) {
@@ -42,7 +62,7 @@ function base64ToBlob(code: string) {
 <template>
   <div class="pdf-view">
     <div class="pdf-main">
-      <iframe id="pdf" :src="`/pdf.js/web/viewer.html?file=${pdfUrl}&path=${appDataDirPath}&name=${pdfName}`" style="width: 100%; height: 100%;"/>
+      <iframe ref="pdfIframe" id="pdf" :src="`/pdf.js/web/viewer.html?file=${pdfUrl}&path=${appDataDirPath}&name=${pdfName}`" style="width: 100%; height: 100%;"/>
     </div>
   </div>
 </template>

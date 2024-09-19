@@ -2,7 +2,7 @@
 import {Close} from "@element-plus/icons-vue";
 import {Store, useStore} from 'vuex';
 import router from "@/router";
-import {computed, ComputedRef, onMounted, Ref, ref, UnwrapRef} from "vue";
+import {computed, ComputedRef, onMounted, provide, Ref, ref, UnwrapRef, watch} from "vue";
 import Sortable from "sortablejs";
 import {TabInterface, TabStateInterface} from "@/store/modules/tab.state.ts";
 import 'animate.css'
@@ -21,6 +21,7 @@ const fileStore: ComputedRef<FileStateInterface> = computed(() => {
 
 // scroller bar ref
 const scrollerBarRef: Ref<HTMLElement | null> = ref(null);
+
 
 // current active tab
 const currentActiveTab: Ref<TabInterface | undefined> = ref(tabStore.value.tabList[0]);
@@ -46,6 +47,9 @@ const fileList: ComputedRef<FileInterface[]> = computed(() => {
 
 onMounted(() => {
   tabDrag();
+
+
+
 })
 
 // switch or add a tab instance
