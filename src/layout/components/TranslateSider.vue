@@ -20,7 +20,7 @@ onMounted(() => {
       ref="sidebarRef"
       :style="{width: `${sidebarWidth}px`}"
       v-show="isTranslateSiderVisible">
-    {{ isTranslateSiderVisible }}
+    TranslateSider
   </div>
 </template>
 

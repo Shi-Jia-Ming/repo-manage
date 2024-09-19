@@ -5,7 +5,6 @@ export interface FileInterface extends DataInterface{
     id: number;
     index?: number;
     fileName: string;
-    fileContent: File;
     active: boolean;
 }
 
@@ -45,7 +44,7 @@ export const fileStore: Module<any, DataInterface> = {
                     fileInstance.active = false;
                 });
                 state.fileList.push(file);
-                file.active = true;
+                // file.active = true;
                 // start from 0
                 file.index = state.fileList.length - 1;
             } else {
@@ -53,7 +52,7 @@ export const fileStore: Module<any, DataInterface> = {
                 state.fileList.map((fileInstance: FileInterface) => {
                     fileInstance.active = false;
                 });
-                state.fileList[index].active = true;
+                // state.fileList[index].active = true;
                 state.fileList[index].index = index;
             }
         },

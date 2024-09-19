@@ -7,7 +7,7 @@ import {Multipane} from "vue-multipane/src";
 import TranslateSider from "@/layout/components/TranslateSider.vue";
 import {Ref, ref} from "vue";
 
-const isTranslateSiderVisible: Ref<boolean> = ref(true);
+const isTranslateSiderVisible: Ref<boolean> = ref(false);
 </script>
 
 <template>

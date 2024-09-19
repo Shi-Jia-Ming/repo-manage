@@ -1,17 +1,12 @@
 <script setup lang="ts">
 import {Close, Minus, FullScreen, Fold, Expand} from '@element-plus/icons-vue';
 import {appWindow} from '@tauri-apps/api/window';
-import toolbarList, {ToolbarItem} from "@/toolbar/toolbar.list.ts";
-import ToolbarContent from "@/layout/components/ToolBarContent.vue";
 import {defineModel, onMounted, onUnmounted, Ref, ref} from "vue";
 
 
 const isTranslateSiderVisible = defineModel('isTranslateSiderVisible');
 // is toolbar content show
 const isToolbarContentShow: Ref<boolean> = ref(false);
-
-// active toolbar item
-const activeToolbarItem: Ref<ToolbarItem | undefined> = ref(undefined);
 
 // mounted
 onMounted(() => {
@@ -22,13 +17,6 @@ onMounted(() => {
 onUnmounted(() => {
   document.removeEventListener('click', handleToolbarContentHide);
 });
-
-// handle toolbar content show
-const handleToolbarContentShow = (toolbarItem: ToolbarItem) => {
-  activeToolbarItem.value = toolbarItem;
-  isToolbarContentShow.value = true;
-  toolbarItem.action ? toolbarItem.action() : () => {};
-};
 
 const handleTranslateCollapse = () => {
   isTranslateSiderVisible.value = !isTranslateSiderVisible.value;
@@ -51,20 +39,6 @@ const handleToolbarContentHide = (event: any) => {
       <div class="app-icon">
         <el-image src="/vite.svg" alt="" style="height: 15px; width: 15px;" data-tauri-drag-region/>
       </div>
-      <div class="tool-list">
-        <div
-            v-for="toolbarItem in toolbarList"
-            @click="handleToolbarContentShow(toolbarItem)"
-            class="tool-item"
-        >{{ toolbarItem.title }}
-        </div>
-      </div>
-
-      <toolbar-content
-          class="toolbar-content"
-          :toolbarItem="activeToolbarItem"
-          :is-show="isToolbarContentShow"
-      />
     </div>
     <el-button-group size="default" class="btn-container">
       <el-button type="text" @click="handleTranslateCollapse" class="collapse-btn">

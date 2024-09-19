@@ -6,6 +6,7 @@ import {computed, ComputedRef, onMounted, Ref, ref, UnwrapRef} from "vue";
 import Sortable from "sortablejs";
 import {TabInterface, TabStateInterface} from "@/store/modules/tab.state.ts";
 import 'animate.css'
+import {FileInterface, FileStateInterface} from "@/store/modules/file.state.ts";
 
 const store: Store<any> = useStore();
 
@@ -14,10 +15,12 @@ const tabStore: ComputedRef<TabStateInterface> = computed(() => {
   return store.state.tab;
 });
 
+const fileStore: ComputedRef<FileStateInterface> = computed(() => {
+  return store.state.file;
+});
+
 // scroller bar ref
 const scrollerBarRef: Ref<HTMLElement | null> = ref(null);
-
-const ids: Ref<number> = ref(0);
 
 // current active tab
 const currentActiveTab: Ref<TabInterface | undefined> = ref(tabStore.value.tabList[0]);
@@ -37,45 +40,35 @@ const tabList: ComputedRef<TabInterface[]> = computed(() => {
   return tabStore.value.tabList;
 });
 
+const fileList: ComputedRef<FileInterface[]> = computed(() => {
+  return fileStore.value.fileList;
+});
+
 onMounted(() => {
   tabDrag();
 })
-
-const addTestTab = () => {
-  addOrSwitchTab({
-    id: ids.value,
-    tabName: "test",
-    routePath: `/tab/repository/${Math.random()}`,
-    routeName: "Repository",
-    active: false
-  });
-
-  ids.value++;
-  console.log(ids.value);
-}
-
-const addPdfTab = () => {
-  addOrSwitchTab({
-    id: ids.value,
-    tabName: "PDF",
-    routePath: `/tab/pdf`,
-    routeName: "PdfView",
-    active: false
-  });
-
-  ids.value++;
-  console.log(ids.value);
-}
 
 // switch or add a tab instance
 const addOrSwitchTab = (tab: TabInterface) => {
   store.commit("tab/add", tab);
   currentActiveTab.value = tab;
+
+  if (tab.routeName === "pdf") {
+    fileList.value.forEach((file) => {
+      file.active = file.fileName === tab.tabName;
+    });
+  }
 };
 
 const removeTab = (tab: TabInterface) => {
   store.commit("tab/remove", tab);
   currentActiveTab.value = tabStore.value.tabList.find((tabInstance) => tabInstance.active);
+
+  if (tab.routeName === "pdf") {
+    fileList.value.forEach((file) => {
+      file.active = file.fileName === currentActiveTab.value?.tabName;
+    });
+  }
 };
 
 const handleScroll = ({scrollLeft}: {scrollLeft: number}) => {
@@ -102,7 +95,7 @@ const tabDrag = () => {
 <template>
   <div :style="{ flexGrow: 1 }" class="pane app-main">
     <div class="main-view">
-      <el-scrollbar ref="scrollerBarRef" @scroll="handleScroll">
+      <el-scrollbar ref="scrollerBarRef" @scroll="handleScroll" class="tab-scroller">
         <div class="tab-title-list">
           <div v-for="(tabInstance, index) in tabList"
                :key="index"
@@ -129,15 +122,6 @@ const tabDrag = () => {
             <component :key="router.currentRoute.value.fullPath" :is="Component"/>
           </keep-alive>
         </router-view>
-        <div class="test-div">
-          <el-button @click="addTestTab">
-            添加测试tab
-          </el-button>
-          <el-button @click="addPdfTab">
-            添加 PDF tab
-          </el-button>
-          <el-switch v-model="tabSwitchAnimation" active-text="开启" inactive-text="关闭"/>
-        </div>
       </div>
     </div>
   </div>
@@ -150,7 +134,16 @@ const tabDrag = () => {
 }
 
 .main-view {
+  height: 100%;
   width: 100%;
+
+  .tab-scroller {
+    height: 37px;
+  }
+
+  .tab-content {
+    height: calc(100% - 37px);
+  }
 }
 
 .tab-title-list {
@@ -191,7 +184,7 @@ const tabDrag = () => {
 }
 
 .tab-title {
-  width: 110px;
+  min-width: 110px;
   height: 35px;
 
   display: flex;
@@ -208,6 +201,7 @@ const tabDrag = () => {
 .tab-title-content {
   width: 100%;
   height: 100%;
+  margin-right: 10px;
   line-height: 100%;
   text-align: start;
   align-content: center;
