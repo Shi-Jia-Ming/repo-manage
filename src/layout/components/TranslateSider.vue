@@ -1,12 +1,16 @@
 <script setup lang="ts">
-import {inject, Ref, watch} from "vue";
+import {inject, Ref, watch, ref} from "vue";
+import TranslateService from "@/utils/translate.service.ts";
 
 const {wordToTranslate, updateWordToTranslate} = inject<{wordToTranslate: Ref<string>, updateWordToTranslate: (word: string) => void},string>('wordToTranslate');
 
+const targetWord = ref<string>('');
+
 watch(wordToTranslate, (newWord) => {
   console.log(newWord);
-  // TODO translate
-  // store.dispatch('translate', newWord);
+  TranslateService.translate(newWord).then((res) => {
+    targetWord.value = res;
+  });
 });
 
 </script>
@@ -27,7 +31,7 @@ watch(wordToTranslate, (newWord) => {
         <span>译文</span>
       </div>
       <div class="translate-target-content">
-        <span>译文</span>
+        <span>{{targetWord}}</span>
       </div>
     </div>
   </div>

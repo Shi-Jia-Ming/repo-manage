@@ -15,7 +15,7 @@ const isTranslateSiderVisible: Ref<boolean> = ref(false);
 const currentSidebar: Ref<string> = ref<string>('');
 
 // is the sidebar visible
-const isSidebarVisible: Ref<Boolean> = ref(false);
+const isSidebarVisible: Ref<boolean> = ref(false);
 </script>
 
 <template>
