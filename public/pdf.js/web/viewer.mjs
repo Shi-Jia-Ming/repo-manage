@@ -3950,7 +3950,7 @@ class AltTextManager {
     this.#currentEditor.altTextFinish();
     this.#currentEditor = null;
     this.#uiManager = null;
-  }
+  }p
   #updateUIState() {
     this.#textarea.disabled = this.#optionDecorative.checked;
   }
@@ -4921,6 +4921,7 @@ class PDFDocumentProperties {
     const [fileName, fileSize, creationDate, modificationDate, pageSize, isLinearized] = await Promise.all([this._fileNameLookup(), this.#parseFileSize(contentLength), this.#parseDate(info.CreationDate), this.#parseDate(info.ModDate), this.pdfDocument.getPage(currentPageNumber).then(pdfPage => {
       return this.#parsePageSize(getPageSizeInches(pdfPage), pagesRotation);
     }), this.#parseLinearization(info.IsLinearized)]);
+    console.log(fileName);
     this.#fieldData = Object.freeze({
       fileName,
       fileSize,
@@ -12866,6 +12867,8 @@ const ViewOnLoad = {
   INITIAL: 1
 };
 const PDFViewerApplication = {
+  path: '',
+  name: '',
   initialBookmark: document.location.hash.substring(1),
   _initializedCapability: {
     ...Promise.withResolvers(),
@@ -13222,6 +13225,7 @@ const PDFViewerApplication = {
     }
   },
   async run(config) {
+    console.log('run function');
     await this.initialize(config);
     const {
       appConfig,
@@ -13231,6 +13235,9 @@ const PDFViewerApplication = {
     const queryString = document.location.search.substring(1);
     const params = parseQueryString(queryString);
     file = params.get("file") ?? AppOptions.get("defaultUrl");
+    // TODO default value of path and name
+    this.path = params.get("path") ?? AppOptions.get("defaultUrl");
+    this.name = params.get("name") ?? AppOptions.get("defaultUrl");
     validateFileURL(file);
     const fileInput = this._openFileInput = document.createElement("input");
     fileInput.id = "fileInput";
@@ -13500,11 +13507,15 @@ const PDFViewerApplication = {
     });
   },
   async download() {
+    console.log('download button clicked');
     let data;
     try {
       data = await this.pdfDocument.getData();
     } catch {}
-    this.downloadManager.download(data, this._downloadUrl, this._docFilename);
+    console.log(this._downloadUrl);
+    const targetWindow = window.parent;
+    console.log(window.top);
+    this.downloadManager.download(data, this._downloadUrl, this.name);
   },
   async save() {
     if (this._saveInProgress) {

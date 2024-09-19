@@ -8,16 +8,22 @@ const route: RouteLocationNormalized = useRoute();
 
 const pdfName: Ref<UnwrapRef<string | RouteParamValue[]>> = ref(route.params.pdfName);
 
+const appDataDirPath: Ref<string> = ref('');
+
 const pdfUrl: Ref<string> = ref('');
 
 onMounted(async () => {
    try {
-     const appDataDirPath = await appDataDir();
-     pdfUrl.value = await invoke('load_file', {filePath: appDataDirPath + pdfName.value});
+     appDataDirPath.value = await appDataDir();
+     pdfUrl.value = await invoke('load_file', {filePath: appDataDirPath.value + pdfName.value});
      pdfUrl.value = URL.createObjectURL(base64ToBlob(pdfUrl.value));
    } catch (e) {
      console.error(e);
    }
+
+   window.addEventListener('message', function (event) {
+    console.log('received message: ', event.data);
+   }, false);
 })
 
 function base64ToBlob(code: string) {
@@ -36,7 +42,7 @@ function base64ToBlob(code: string) {
 <template>
   <div class="pdf-view">
     <div class="pdf-main">
-      <iframe id="pdf" :src="`/pdf.js/web/viewer.html?file=${pdfUrl}`" style="width: 100%; height: 100%;"/>
+      <iframe id="pdf" :src="`/pdf.js/web/viewer.html?file=${pdfUrl}&path=${appDataDirPath}&name=${pdfName}`" style="width: 100%; height: 100%;"/>
     </div>
   </div>
 </template>
