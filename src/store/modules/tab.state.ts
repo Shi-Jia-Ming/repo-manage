@@ -54,7 +54,7 @@ export const tabStore: Module<any, DataInterface> = {
         // push to the view
         router.push(tab.routePath)
           .then((res) => {
-            console.log("router push ==> ", tab.routePath, " successful: ", res?.message);
+            console.log("router push ==> ", tab.routePath, " successful: ", res);
           }).catch((err) => {
             console.log("router push ==>", tab.routePath, "failed, error: ", err?.message);
         });
@@ -68,7 +68,7 @@ export const tabStore: Module<any, DataInterface> = {
         // push to the view
         router.push(tab.routePath)
           .then((res) => {
-            console.log("router push ==> ", tab.routePath, " successful: ", res?.message);
+            console.log("router push ==> ", tab.routePath, " successful: ", res);
           }).catch((err) => {
           console.log("router push ==>", tab.routePath, "failed, error: ", err?.message);
         });
@@ -100,7 +100,7 @@ export const tabStore: Module<any, DataInterface> = {
           // push to the view
           router.push("/tab")
             .then((res) => {
-              console.log("router push ==> ", "/tab", " successful: ", res?.message);
+              console.log("router push ==> ", "/tab", " successful: ", res);
             }).catch((err) => {
             console.log("router push ==>", "/tab", "failed, error: ", err?.message);
           });
@@ -121,7 +121,7 @@ export const tabStore: Module<any, DataInterface> = {
           state.tabList[indexToShow].active = true;
           router.push(state.tabList[indexToShow].routePath)
             .then((res) => {
-              console.log("router push ==> ", state.tabList[indexToShow].routePath, " successful: ", res?.message);
+              console.log("router push ==> ", state.tabList[indexToShow].routePath, " successful: ", res);
             }).catch((err) => {
             console.log("router push ==>", state.tabList[indexToShow].routePath, "failed, error: ", err?.message);
           });

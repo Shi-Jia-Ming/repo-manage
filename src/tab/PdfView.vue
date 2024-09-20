@@ -14,9 +14,11 @@ const pdfUrl: Ref<string> = ref('');
 
 const pdfIframe: Ref<HTMLElement | null> = ref(null);
 
-const {wordToTranslate, updateWordToTranslate} = inject<{wordToTranslate: Ref<string>, updateWordToTranslate: (word: string) => void},string>('wordToTranslate');
+// @ts-ignore
+const {wordToTranslate, updateWordToTranslate} = inject<{wordToTranslate: Ref<string>, updateWordToTranslate: (word: string) => void}>('wordToTranslate');
 
 onMounted(async () => {
+  // TODO load activate status when the component is mounted
    try {
      appDataDirPath.value = await appDataDir();
      pdfUrl.value = await invoke('load_file', {filePath: appDataDirPath.value + pdfName.value});
@@ -32,8 +34,10 @@ onMounted(async () => {
   console.log(pdfIframe.value);
 
   if (pdfIframe.value) {
-    pdfIframe.value.contentWindow.addEventListener('mouseup', (_) => {
-      const selectedText = pdfIframe.value.contentWindow.getSelection().toString();
+    // @ts-ignore
+    pdfIframe.value!.contentWindow.addEventListener('mouseup', (_: any) => {
+      // @ts-ignore
+      const selectedText = pdfIframe.value!.contentWindow.getSelection().toString();
       if (selectedText !== '')
         updateWordToTranslate(selectedText);
     });
@@ -41,21 +45,22 @@ onMounted(async () => {
 })
 
 onUnmounted(() => {
-  pdfIframe.value?.contentWindow.removeEventListener('mouseup', (_) => {
+  // @ts-ignore
+  pdfIframe.value?.contentWindow.removeEventListener('mouseup', (_: any) => {
     console.log('remove event listener');
   });
 })
 
 function base64ToBlob(code: string) {
-  code = code.replace(/[\n\r]/g, '')
+  code = code.replace(/[\n\r]/g, '');
   // atob() 方法用于解码使用 base-64 编码的字符串。
-  const raw = window.atob(code)
-  const rawLength = raw.length
-  const uInt8Array = new Uint8Array(rawLength)
+  const raw = window.atob(code);
+  const rawLength = raw.length;
+  const uInt8Array = new Uint8Array(rawLength);
   for (let i = 0; i < rawLength; ++i) {
-    uInt8Array[i] = raw.charCodeAt(i)
+    uInt8Array[i] = raw.charCodeAt(i);
   }
-  return new Blob([uInt8Array], { type: 'application/pdf' })
+  return new Blob([uInt8Array], { type: 'application/pdf' });
 }
 </script>
 

@@ -2,7 +2,8 @@
 import {inject, Ref, watch, ref} from "vue";
 import TranslateService from "@/utils/translate.service.ts";
 
-const {wordToTranslate, updateWordToTranslate} = inject<{wordToTranslate: Ref<string>, updateWordToTranslate: (word: string) => void},string>('wordToTranslate');
+// @ts-ignore
+const {wordToTranslate, updateWordToTranslate} = inject<{wordToTranslate: Ref<string>, updateWordToTranslate: (word: string) => void}>('wordToTranslate');
 
 const targetWord = ref<string>('');
 
@@ -18,20 +19,20 @@ watch(wordToTranslate, (newWord) => {
 <template>
   <div
       class="translate-sider">
-    <div class="translate-origin-container">
-      <div class="translate-origin-title">
-        <span>原文</span>
-      </div>
-      <div class="translate-origin-content">
-        <span>{{wordToTranslate}}</span>
-      </div>
-    </div>
     <div class="translate-target-container">
       <div class="translate-target-title">
         <span>译文</span>
       </div>
       <div class="translate-target-content">
         <span>{{targetWord}}</span>
+      </div>
+    </div>
+    <div class="translate-origin-container">
+      <div class="translate-origin-title">
+        <span>原文</span>
+      </div>
+      <div class="translate-origin-content">
+        <span>{{wordToTranslate}}</span>
       </div>
     </div>
   </div>

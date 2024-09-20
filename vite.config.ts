@@ -42,16 +42,6 @@ export default defineConfig({
     }),
     Inspect(),
   ],
-  server: {
-    host: 'localhost',
-    proxy: {
-      '/api': {
-        target: 'http://118.26.36.198:31188',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, '')
-      }
-    }
-  },
   css: {
     preprocessorOptions: {
       scss: {

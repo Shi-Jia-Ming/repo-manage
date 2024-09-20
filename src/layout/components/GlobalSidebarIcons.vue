@@ -1,18 +1,15 @@
 <script setup lang="ts">
 import sidebarList, {SidebarItem} from "@/sider/sidebar.list.ts";
-import {ModelRef, Ref, ref} from "vue";
+import {Ref, ref} from "vue";
 
-// // current sidebar index
-// const currentSidebarIndex: ModelRef<number> = defineModel<number, string>('currentSidebarIndex');
-//
 // is the sidebar visible
-const isSidebarVisible: ModelRef<boolean> = defineModel<boolean, string>('isSidebarVisible');
+const isSidebarVisible = defineModel<boolean, string>('isSidebarVisible');
 
 // current sidebar index
 const currentSidebarIndex: Ref<number> = ref(0);
 
 // current sidebar
-const currentSidebar: ModelRef<string> = defineModel<string, string>('currentSidebar');
+const currentSidebar = defineModel<string, string>('currentSidebar');
 
 // handle hide sidebar
 const handleSwitch = (sidebarItem: SidebarItem, index: number) => {
@@ -47,7 +44,7 @@ const handleSwitch = (sidebarItem: SidebarItem, index: number) => {
 
       <div
           v-if="isSidebarVisible"
-          :style="{ 'top': `(${currentSidebarIndex * 45})px` }"
+          :style="{ 'top': `calc(30px + ${currentSidebarIndex * 45}px)` }"
           class="sidebar-slide-block"/>
     </div>
   </div>
@@ -55,9 +52,9 @@ const handleSwitch = (sidebarItem: SidebarItem, index: number) => {
 
 <style scoped lang="scss">
 .sidebar-icon-list-container {
-  width: 50px;
-  max-width: 50px;
-  min-width: 50px;
+  width: 45px;
+  max-width: 45px;
+  min-width: 45px;
   display: flex;
   flex-direction: column;
   align-content: center;

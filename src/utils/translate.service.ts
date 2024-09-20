@@ -1,12 +1,12 @@
-import axios, {AxiosResponse} from "axios";
-import {Body, getClient} from "@tauri-apps/api/http";
+import {Body, getClient, Response} from "@tauri-apps/api/http";
 
 export default class TranslateService {
     // TODO user select the origin and target language in translation, for now it is hardcoded from en to zh
+    // TODO bug: the translation service is not working when the key is too long, need to fix this
 
-    public static async translate(key: string): string {
+    public static async translate(key: string): Promise<string> {
         // handle key, remove the special characters in the key
-        const sanitizedKey = key.replace(/\n/g, '');
+        const sanitizedKey = key.replace(/[\n\r]/g, '');
 
         console.log(key + " sanitized to " + sanitizedKey);
 
@@ -17,15 +17,31 @@ export default class TranslateService {
             target_lang: "zh"
         });
 
-        const response = await client.post("http://118.26.36.198:31188/v1/translate", body, {
+        const response: Response<{
+            alternatives: string[],
+            code: number,
+            data: string,
+            id: number,
+            method: string,
+            source_lang: string,
+            target_lang: string
+        }> = await client.post<{
+            alternatives: string[],
+            code: number,
+            data: string,
+            id: number,
+            method: string,
+            source_lang: string,
+            target_lang: string
+        }>("http://118.26.36.198:31188/v1/translate", body, {
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": "Bearer GIC7xLUKsmBLiwgE"
             }
         });
 
-        console.log(body, response);
+        console.debug(body, response);
 
-        return response.data.alternatives[0];
+        return response.data.alternatives[0] as string;
     }
 }
