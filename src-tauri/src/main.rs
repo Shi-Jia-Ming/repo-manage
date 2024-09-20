@@ -10,7 +10,7 @@ mod utils;
 
 fn main() {
   tauri::Builder::default()
-      .invoke_handler(tauri::generate_handler![load_file, save_file, get_file_list])
+      .invoke_handler(tauri::generate_handler![load_file, save_file, get_file_list, init_file_path])
     .setup(|app| {
       set_window_shadows(app);
       Ok(())
@@ -41,6 +41,14 @@ fn get_file_list(file_path: &str) -> Vec<String> {
         file_list.push(file_name);
     }
     file_list
+}
+
+#[command]
+fn init_file_path(file_path: &str) {
+    let data_dir = PathBuf::from(file_path);
+    if !data_dir.exists() {
+        std::fs::create_dir_all(data_dir).unwrap();
+    }
 }
 
 #[command]
