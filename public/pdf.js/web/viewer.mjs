@@ -13295,7 +13295,7 @@ const PDFViewerApplication = {
       appConfig.findBar?.toggleButton?.classList.add("hidden");
     }
     if (file) {
-      this.open({
+      await this.open({
         url: file
       });
     } else {
@@ -13466,6 +13466,7 @@ const PDFViewerApplication = {
       this.setTitleUsingUrl(args.originalUrl || args.url, args.url);
     }
     const apiParams = AppOptions.getAll(OptionKind.API);
+    console.log(apiParams);
     const loadingTask = getDocument({
       ...apiParams,
       ...args
@@ -13514,10 +13515,10 @@ const PDFViewerApplication = {
     } catch {}
     console.log(this._downloadUrl);
     const targetWindow = window.parent;
-    console.log(window.top);
     this.downloadManager.download(data, this._downloadUrl, this.name);
   },
   async save() {
+    console.log("save event");
     if (this._saveInProgress) {
       return;
     }
@@ -13686,7 +13687,6 @@ const PDFViewerApplication = {
           return;
         }
         this.initialBookmark = initialBookmark;
-        pdfViewer.currentScaleValue = pdfViewer.currentScaleValue;
         this.setInitialView(hash);
       }).catch(() => {
         this.setInitialView();

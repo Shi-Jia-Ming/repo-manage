@@ -33,10 +33,10 @@ export default class TranslateService {
             method: string,
             source_lang: string,
             target_lang: string
-        }>("http://118.26.36.198:31188/v1/translate", body, {
+        }>("http://47.121.201.169:39770/v1/translate", body, {
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": "Bearer GIC7xLUKsmBLiwgE"
+                "Authorization": "Bearer qpalzm102938!"
             }
         });
 

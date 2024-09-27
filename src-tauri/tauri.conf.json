@@ -6,7 +6,7 @@
     "distDir": "../dist"
   },
   "package": {
-    "productName": "repo-manage",
+    "productName": "pdf-translator",
     "version": "0.1.0"
   },
   "tauri": {
@@ -28,7 +28,7 @@
       "http": {
         "all": true,
         "request": true,
-        "scope": ["http://118.26.36.198:31188/*"]
+        "scope": ["http://118.26.36.198:31188/*", "http://47.121.201.169:39770/*"]
       },
       "window": {
         "all": true
@@ -52,7 +52,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.stark.repo-manage",
+      "identifier": "cn.edu.hit.pdf-translator",
       "longDescription": "",
       "macOS": {
         "entitlements": null,
@@ -82,7 +82,7 @@
         "fullscreen": false,
         "height": 600,
         "resizable": true,
-        "title": "repo-manage",
+        "title": "英文文献阅读器",
         "width": 800,
         "decorations": false
       }
