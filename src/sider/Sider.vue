@@ -17,5 +17,12 @@ const props = defineProps<{
 </template>
 
 <style scoped lang="scss">
-
+.sider-layout {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: #f1f3f5;
+}
 </style>

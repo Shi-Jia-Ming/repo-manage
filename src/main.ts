@@ -2,6 +2,8 @@ import {createApp, Ref, ref} from 'vue';
 import App from './App.vue';
 import router from "./router";
 import store from "@/store";
+// register svg icons
+import 'virtual:svg-icons-register';
 
 // word to translate
 const wordToTranslate: Ref<string> = ref('');

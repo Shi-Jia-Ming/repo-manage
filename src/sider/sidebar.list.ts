@@ -12,8 +12,8 @@ const sidebarList: SidebarItem[] = [
     title: "Document",
     name: "document",
     keymap: "",
-    icon: "file.svg",
-    iconActive: "file-active.svg",
+    icon: "document-list",
+    iconActive: "document-list-active",
     component: () => import("@/sider/components/Document.vue")
   }
 ];

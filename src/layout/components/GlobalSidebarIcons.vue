@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import sidebarList, {SidebarItem} from "@/sider/sidebar.list.ts";
 import {Ref, ref} from "vue";
+import SvgIcon from "@/components/SvgIcon.vue";
 
 // is the sidebar visible
 const isSidebarVisible = defineModel<boolean, string>('isSidebarVisible');
@@ -39,7 +40,8 @@ const handleSwitch = (sidebarItem: SidebarItem, index: number) => {
           @click="handleSwitch(sidebarItem, index)"
           class="sidebar-icon-container"
       >
-        <el-image :src="`/icons/${sidebarItem.icon}`" alt="" class="sidebar-icon"/>
+        <!-- icon animation -->
+        <svg-icon :icon-class="sidebarItem.icon" class-name="sidebar-icon" />
       </div>
 
       <div

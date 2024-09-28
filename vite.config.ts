@@ -7,6 +7,8 @@ import IconsResolver from 'unplugin-icons/resolver'
 import {ElementPlusResolver} from 'unplugin-vue-components/resolvers'
 import Inspect from 'vite-plugin-inspect'
 import {resolve} from 'path';
+import {createSvgIconsPlugin} from "vite-plugin-svg-icons";
+import {pathToFileURL} from "node:url";
 
 const pathSrc = resolve(__dirname, 'src');
 
@@ -41,6 +43,11 @@ export default defineConfig({
       autoInstall: true,
     }),
     Inspect(),
+    createSvgIconsPlugin({
+      iconDirs: [resolve(pathSrc, 'assets/icons')],
+      symbolId: 'icon-[name]',
+      customDomId: 'icon-svg'
+    })
   ],
   css: {
     preprocessorOptions: {

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import {FolderAdd} from "@element-plus/icons-vue";
 import {Store, useStore} from "vuex";
 import {FileInterface, FileStateInterface} from "@/store/modules/file.state.ts";
 import {computed, ComputedRef, onMounted} from "vue";
@@ -8,6 +7,7 @@ import {TabInterface, TabStateInterface} from "@/store/modules/tab.state.ts";
 import {BaseDirectory, BinaryFileContents, writeBinaryFile} from "@tauri-apps/api/fs";
 import {invoke} from "@tauri-apps/api/tauri";
 import {appDataDir} from "@tauri-apps/api/path";
+import SvgIcon from "@/components/SvgIcon.vue";
 
 const store: Store<any> = useStore();
 
@@ -124,9 +124,7 @@ const activate = (file: FileInterface) => {
           :show-file-list="false"
       >
         <el-button type="text">
-          <el-icon color="#000" size="large">
-            <folder-add/>
-          </el-icon>
+          <svg-icon icon-class="folder-badge-plus" style="height: 24px; width: 24px;"/>
         </el-button>
       </el-upload>
     </div>
@@ -137,7 +135,7 @@ const activate = (file: FileInterface) => {
         :style="{backgroundColor: file.active ? '#ffffff' : '#f1f3f5'}"
         @click="activate(file)"
       >
-        <el-image :src="`/icons/pdf-file.svg`" style="width: 16px; height: 16px;"/>
+        <svg-icon icon-class="pdf-file" style="width: 16px; height: 16px;"/>
         {{ file.fileName }}
       </div>
     </div>
@@ -145,6 +143,12 @@ const activate = (file: FileInterface) => {
 </template>
 
 <style scoped lang="scss">
+.document-sidebar-container {
+  height: 100%;
+  width: 100%;
+  background-color: #f1f3f5;
+}
+
 .document-sidebar-file-item {
   display: inline-block;
   white-space: nowrap;

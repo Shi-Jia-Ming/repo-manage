@@ -7,26 +7,6 @@ const routes: Array<RouteRecordRaw> = [
     redirect: "/tab",
   },
   {
-    path: "/sider",
-    name: "Sider",
-    component:  () => import("@/sider/Sider.vue"),
-    // TODO unused child components
-    children: [
-      {
-        path: "repository",
-        name: "Repository",
-        component: () => import("@/sider/components/Repository.vue"),
-        meta: { icon: "file.svg", iconActive: "file-active.svg" }
-      },
-      {
-        path: "hello-world",
-        name: "HelloWorld",
-        component: () => import("@/sider/components/HelloWorld.vue"),
-        meta: { icon: "file.svg", iconActive: "file-active.svg" }
-      }
-    ]
-  },
-  {
     path: "/tab",
     name: "Tab",
     redirect: "/tab/default",
