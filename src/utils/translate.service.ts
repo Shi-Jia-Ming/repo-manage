@@ -60,8 +60,7 @@ export default class TranslateService {
         try {
             return response.data.alternatives[0] as string;
         } catch (e) {
-            console.error(e);
-            return "翻译失败";
+            return `翻译失败：${e}`;
         }
     }
 }

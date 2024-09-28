@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import {Store, useStore} from "vuex";
-import {ComputedRef, computed} from "vue";
+import {ComputedRef, computed, Ref, onMounted, ref} from "vue";
 import {TabStateInterface} from "@/store/modules/tab.state.ts";
+import {appConfigDir} from "@tauri-apps/api/path";
+import {invoke} from "@tauri-apps/api/tauri";
 
 const store: Store<any> = useStore();
 
@@ -16,6 +18,21 @@ const activePdfName: ComputedRef<string> = computed(() => {
     }
   }
   return "";
+});
+
+const currentApi: Ref<string> = ref("");
+const currentApiToken: Ref<string> = ref("");
+
+onMounted(async () => {
+  const appConfigDirPath = await appConfigDir();
+  const config: {
+    service: {
+      translate_url: string,
+      translate_token: string
+    }
+  } = await invoke('get_configuration', {configDirPath: appConfigDirPath});
+  currentApiToken.value = config.service.translate_token;
+  currentApi.value = config.service.translate_url;
 });
 </script>
 
@@ -35,6 +52,10 @@ const activePdfName: ComputedRef<string> = computed(() => {
         <span>当前未激活任何 PDF</span>
       </div>
     </div>
+    <div class="api-status-container">
+      <span>当前API：</span>
+      <span>{{currentApi}}</span>
+    </div>
   </div>
 </template>
 
@@ -42,8 +63,26 @@ const activePdfName: ComputedRef<string> = computed(() => {
 .global-statusbar-container {
   width: 100%;
   height: 25px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 .current-active-container {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  height: 100%;
+  padding: 0 10px;
+  font-size: x-small;
+
+  // can not select
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.api-status-container {
   display: flex;
   justify-content: start;
   align-items: center;
