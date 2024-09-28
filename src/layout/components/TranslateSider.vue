@@ -87,7 +87,12 @@ watch(wordToTranslate, (newWord) => {
   height: 55%;
 }
 
-.translate-origin-title,
+.translate-origin-title {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
 .translate-target-title {
   font-size: 16px;
   font-weight: bold;

@@ -8,10 +8,6 @@
     transition: none !important;
 }
 
-.splitpanes--horizontal .splitpanes__pane {
-    transition: none !important;
-}
-
 .splitpanes--dragging .splitpanes__pane {
     transition: none !important;
 }

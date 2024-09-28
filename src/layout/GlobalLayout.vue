@@ -28,14 +28,14 @@ const isSidebarVisible: Ref<boolean> = ref(false);
       />
       <splitpanes layout="vertical" class="main-layout default-theme">
         <!-- TODO animation of collapse and expand -->
-        <!-- TODO width of sidebar -->
-        <pane v-if="isSidebarVisible" class="global-sidebar" min-size="10" max-size="30">
+        <pane  v-if="isSidebarVisible" class="global-sidebar" min-size="10" max-size="30">
           <sider :current-component="currentSidebar"/>
         </pane>
-        <pane :min-size="isTranslateSiderVisible && isSidebarVisible ? 40 : !isTranslateSiderVisible && !isSidebarVisible ? 100 : 70">
+        <pane
+            :min-size="isTranslateSiderVisible && isSidebarVisible ? 40 : !isTranslateSiderVisible && !isSidebarVisible ? 100 : 70">
           <app-main/>
         </pane>
-        <pane v-if="isTranslateSiderVisible" max-size="30">
+        <pane v-if="isTranslateSiderVisible" max-size="30" class="global-translate-bar">
           <translate-sider v-model:is-translate-sider-visible="isTranslateSiderVisible"/>
         </pane>
       </splitpanes>
