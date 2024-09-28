@@ -58,6 +58,7 @@ const isSidebarVisible: Ref<boolean> = ref(false);
   justify-content: center;
   align-items: center;
   place-items: center;
+  overflow: hidden;
 }
 
 .main-layout {

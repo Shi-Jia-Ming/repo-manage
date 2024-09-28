@@ -30,5 +30,6 @@ onMounted(async () => {
   justify-content: center;
   align-items: center;
   place-items: center;
+  overflow: hidden;
 }
 </style>
