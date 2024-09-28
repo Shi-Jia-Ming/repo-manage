@@ -22,6 +22,11 @@ const activePdfName: ComputedRef<string> = computed(() => {
 <template>
   <div class="global-statusbar-container">
     <div class="current-active-container">
+      <div class="current-active-icon-container">
+        <svg-icon
+            :icon-class="activePdfName === '' ? 'circle' : 'circle-active'"
+            style="height: 12px; width: 12px;"/>
+      </div>
       <div v-if="activePdfName !== ''" class="current-active">
         <span>当前激活的 PDF：</span>
         <span>{{activePdfName}}</span>
@@ -43,7 +48,7 @@ const activePdfName: ComputedRef<string> = computed(() => {
   justify-content: start;
   align-items: center;
   height: 100%;
-  padding: 0 20px;
+  padding: 0 10px;
   font-size: x-small;
 
   // can not select
@@ -51,5 +56,11 @@ const activePdfName: ComputedRef<string> = computed(() => {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+.current-active-icon-container {
+  margin-right: 5px;
+  display: flex;
+  justify-content: center;
 }
 </style>
