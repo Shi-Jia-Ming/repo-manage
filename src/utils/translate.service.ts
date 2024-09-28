@@ -12,8 +12,6 @@ export default class TranslateService {
         // handle key, remove the special characters in the key
         const sanitizedKey = key.replace(/[\n\r]/g, '');
 
-        console.log(key + " sanitized to " + sanitizedKey);
-
         const client = await getClient();
         const body: Body = Body.json({
             text: sanitizedKey,
@@ -59,6 +57,11 @@ export default class TranslateService {
 
         console.debug(body, response);
 
-        return response.data.alternatives[0] as string;
+        try {
+            return response.data.alternatives[0] as string;
+        } catch (e) {
+            console.error(e);
+            return "翻译失败";
+        }
     }
 }

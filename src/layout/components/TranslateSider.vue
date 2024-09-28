@@ -1,16 +1,20 @@
 <script setup lang="ts">
 import {inject, Ref, watch, ref} from "vue";
 import TranslateService from "@/utils/translate.service.ts";
+import {Loading} from "@element-plus/icons-vue";
 
 // @ts-ignore
 const {wordToTranslate, updateWordToTranslate} = inject<{wordToTranslate: Ref<string>, updateWordToTranslate: (word: string) => void}>('wordToTranslate');
 
 const targetWord = ref<string>('');
 
+const isLoading: Ref<boolean> = ref(false);
+
 watch(wordToTranslate, (newWord) => {
-  console.log(newWord);
+  isLoading.value = true;
   TranslateService.translate(newWord).then((res) => {
     targetWord.value = res;
+    isLoading.value = false;
   });
 });
 
@@ -20,9 +24,17 @@ watch(wordToTranslate, (newWord) => {
   <div
       class="translate-sider">
     <div class="translate-target-container">
-      <div class="translate-target-title">
-        <span>译文</span>
+      <div class="translate-target-title-container">
+        <div class="translate-target-title">
+          <span>译文</span>
+        </div>
+        <div class="translate-loading-icon" v-if="isLoading">
+          <el-icon class="is-loading" style="height: 20px; width: 20px;">
+            <loading />
+          </el-icon>
+        </div>
       </div>
+
       <div class="translate-target-content">
         <span>{{targetWord}}</span>
       </div>
@@ -51,6 +63,20 @@ watch(wordToTranslate, (newWord) => {
   flex-direction: column;
   padding: 10px;
   width: 95%;
+
+  .translate-target-title-container {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 10px;
+  }
+
+  .translate-loading-icon {
+    width: 20px;
+    height: 20px;
+    padding: 0 5px;
+    justify-content: center;
+    align-self: center;
+  }
 }
 
 .translate-origin-container {
@@ -65,7 +91,6 @@ watch(wordToTranslate, (newWord) => {
 .translate-target-title {
   font-size: 16px;
   font-weight: bold;
-  margin-bottom: 10px;
 }
 
 .translate-origin-content,
