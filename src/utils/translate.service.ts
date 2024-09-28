@@ -1,8 +1,12 @@
 import {Body, getClient, Response} from "@tauri-apps/api/http";
+import {appConfigDir} from "@tauri-apps/api/path";
+import {invoke} from "@tauri-apps/api/tauri";
 
 export default class TranslateService {
     // TODO user select the origin and target language in translation, for now it is hardcoded from en to zh
     // TODO bug: the translation service is not working when the key is too long, need to fix this
+    private static translateUrl: string = "";
+    private static translateToken: string = "";
 
     public static async translate(key: string): Promise<string> {
         // handle key, remove the special characters in the key
@@ -16,6 +20,19 @@ export default class TranslateService {
             source_lang: "en",
             target_lang: "zh"
         });
+
+        // check the translateUrl and token
+        if (TranslateService.translateToken === "" || TranslateService.translateUrl === "") {
+            const appConfigDirPath = await appConfigDir();
+            const config: {
+                service: {
+                    translate_url: string,
+                    translate_token: string
+                }
+            } = await invoke('get_configuration', {configDirPath: appConfigDirPath});
+            TranslateService.translateToken = config.service.translate_token;
+            TranslateService.translateUrl = config.service.translate_url;
+        }
 
         const response: Response<{
             alternatives: string[],
@@ -33,10 +50,10 @@ export default class TranslateService {
             method: string,
             source_lang: string,
             target_lang: string
-        }>("http://47.121.201.169:39770/v1/translate", body, {
+        }>(`${TranslateService.translateUrl}/v1/translate`, body, {
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": "Bearer qpalzm102938!"
+                "Authorization": `Bearer ${TranslateService.translateToken}`
             }
         });
 
