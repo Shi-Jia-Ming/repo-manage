@@ -72,6 +72,8 @@ const removeTab = (tab: TabInterface) => {
     fileList.value.forEach((file) => {
       file.active = file.fileName === currentActiveTab.value?.tabName;
     });
+  } else if (tabList.value.length === 0) {
+    router.push({path: "/tab/default"});
   }
 };
 
@@ -99,7 +101,7 @@ const tabDrag = () => {
 <template>
   <div :style="{ flexGrow: 1 }" class="app-main">
     <div class="main-view">
-      <el-scrollbar ref="scrollerBarRef" @scroll="handleScroll" class="tab-scroller">
+      <el-scrollbar ref="scrollerBarRef" @scroll="handleScroll" class="tab-scroller" v-show="tabList.length !== 0">
         <div class="tab-title-list">
           <div v-for="(tabInstance, index) in tabList"
                :key="index"

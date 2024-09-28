@@ -3,8 +3,8 @@ import {createMemoryHistory, createRouter, Router, RouteRecordRaw} from "vue-rou
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
-    name: "Default",
-    redirect: "/tab",
+    name: "Root",
+    redirect: "/tab/default",
   },
   {
     path: "/tab",
@@ -15,11 +15,6 @@ const routes: Array<RouteRecordRaw> = [
         path: "default",
         name: "Default",
         component: () => import("@/tab/Default.vue"),
-      },
-      {
-        path: "repository/:repoName",
-        name: "Repository",
-        component: () => import("@/tab/Repository.vue"),
       },
       {
         path: "pdf/:pdfName",
