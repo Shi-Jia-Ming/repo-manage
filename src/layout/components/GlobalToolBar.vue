@@ -37,7 +37,7 @@ const handleToolbarContentHide = (event: any) => {
   <div data-tauri-drag-region class="toolbar-container">
     <div class="left-content">
       <div class="app-icon">
-        <el-image src="/vite.svg" alt="" style="height: 15px; width: 15px;" data-tauri-drag-region/>
+        <el-image src="/icon.png" alt="" style="height: 15px; width: 15px;" data-tauri-drag-region/>
       </div>
     </div>
     <el-button-group size="default" class="btn-container">

@@ -3,7 +3,9 @@
 </script>
 
 <template>
-  <div class="default-container"></div>
+  <div class="default-container">
+    Welcome To Pdf-Translator
+  </div>
 </template>
 
 <style scoped lang="scss">
