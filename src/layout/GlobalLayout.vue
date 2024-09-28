@@ -32,10 +32,10 @@ const isSidebarVisible: Ref<boolean> = ref(false);
         <pane v-if="isSidebarVisible" class="global-sidebar" min-size="10" max-size="30">
           <sider :current-component="currentSidebar"/>
         </pane>
-        <pane min-size="70">
+        <pane :min-size="isTranslateSiderVisible && isSidebarVisible ? 40 : !isTranslateSiderVisible && !isSidebarVisible ? 100 : 70">
           <app-main/>
         </pane>
-        <pane v-if="isTranslateSiderVisible">
+        <pane v-if="isTranslateSiderVisible" max-size="30">
           <translate-sider v-model:is-translate-sider-visible="isTranslateSiderVisible"/>
         </pane>
       </splitpanes>

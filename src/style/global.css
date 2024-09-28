@@ -3,3 +3,15 @@
     background-color: #f1f3f5 !important;
     border-right: solid 1px #d1d5da !important;
 }
+
+.splitpanes--vertical .splitpanes__pane {
+    transition: none !important;
+}
+
+.splitpanes--horizontal .splitpanes__pane {
+    transition: none !important;
+}
+
+.splitpanes--dragging .splitpanes__pane {
+    transition: none !important;
+}
