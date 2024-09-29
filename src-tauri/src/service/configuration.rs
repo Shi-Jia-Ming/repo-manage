@@ -1,3 +1,4 @@
+use std::env;
 use std::path::PathBuf;
 use tauri::command;
 
@@ -6,11 +7,10 @@ pub fn init_configuration(config_dir_path: &str) {
     let config_file_name: &str = "config.toml";
     let config_file_path = PathBuf::from(config_dir_path).join(config_file_name);
     if !config_file_path.exists() {
-        let default_config = r#"
-[service]
-translate_url = "http://118.26.36.198:31188"
-translate_token = "GIC7xLUKsmBLiwgE"
-"#;
+        let default_config = format!("[service]
+translate_url = \"{}\"
+translate_token = \"{}\"
+", env::var("DEFAULT_URL").unwrap(), env::var("DEFAULT_TOKEN").unwrap());
         std::fs::write(config_file_path, default_config).unwrap();
     }
 }
