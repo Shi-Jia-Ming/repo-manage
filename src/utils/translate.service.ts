@@ -58,7 +58,7 @@ export default class TranslateService {
         console.debug(body, response);
 
         try {
-            return response.data.alternatives[0] as string;
+            return response.data.data as string;
         } catch (e) {
             return `翻译失败：${e}`;
         }

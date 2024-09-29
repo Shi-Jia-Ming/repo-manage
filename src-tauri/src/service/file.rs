@@ -1,3 +1,4 @@
+use std::io::Read;
 use std::path::PathBuf;
 use tauri::command;
 
@@ -22,4 +23,14 @@ pub fn init_file_path(file_path: &str) {
     if !data_dir.exists() {
         std::fs::create_dir_all(data_dir).unwrap();
     }
+}
+
+
+#[command]
+pub fn load_file(file_path: &str) -> String {
+    let file = std::fs::File::open(file_path).unwrap();
+    let reader = std::io::BufReader::new(file);
+    let data: Vec<u8> = reader.bytes().map(|b| b.unwrap()).collect();
+
+    base64::encode(data)
 }
