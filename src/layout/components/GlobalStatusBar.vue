@@ -4,6 +4,8 @@ import {ComputedRef, computed, Ref, onMounted, ref} from "vue";
 import {TabStateInterface} from "@/store/modules/tab.state.ts";
 import {appConfigDir} from "@tauri-apps/api/path";
 import {invoke} from "@tauri-apps/api/tauri";
+import TranslateService from "@/utils/translate.service.ts";
+import {Loading} from "@element-plus/icons-vue";
 
 const store: Store<any> = useStore();
 
@@ -20,20 +22,42 @@ const activePdfName: ComputedRef<string> = computed(() => {
   return "";
 });
 
-const currentApi: Ref<string> = ref("");
+const currentApiName: Ref<string> = ref("");
+const currentApiUrl: Ref<string> = ref("");
 const currentApiToken: Ref<string> = ref("");
+const currentApiStatus: Ref<boolean | undefined> = ref();
 
 onMounted(async () => {
   const appConfigDirPath = await appConfigDir();
   const config: {
     service: {
+      translate_name: string,
       translate_url: string,
       translate_token: string
     }
   } = await invoke('get_configuration', {configDirPath: appConfigDirPath});
+  currentApiName.value = config.service.translate_name;
   currentApiToken.value = config.service.translate_token;
-  currentApi.value = config.service.translate_url;
+  currentApiUrl.value = config.service.translate_url;
+
+  await testApi();
 });
+
+const testApi = async () => {
+  currentApiStatus.value = undefined;
+  TranslateService.translate('test').then((_res) => {
+    currentApiStatus.value = true;
+  }).catch((_err) => {
+    currentApiStatus.value = false;
+  });
+}
+
+const updateApi = async () => {
+  console.log("update");
+  const appConfigDirPath = await appConfigDir();
+  await invoke('write_configuration', {configDirPath: appConfigDirPath, translateName: currentApiName.value, translateUrl: currentApiUrl.value, translateToken: currentApiToken.value});
+  await testApi();
+}
 </script>
 
 <template>
@@ -52,10 +76,49 @@ onMounted(async () => {
         <span>当前未激活任何 PDF</span>
       </div>
     </div>
-    <div class="api-status-container">
-      <span>当前API：</span>
-      <span>{{currentApi}}</span>
-    </div>
+    <el-popover class="api-tip-popover" width="300" trigger="click">
+      <!-- TODO use class cannot-select -->
+      <h3 class="cannot-select">API配置</h3>
+      <el-form label-position="right" label-width="auto" style="justify-content: end;">
+        <el-form-item label="名称" label-position="right">
+          <el-input v-model="currentApiName" />
+        </el-form-item>
+        <el-form-item label="地址" label-position="right">
+          <el-input v-model="currentApiUrl" />
+        </el-form-item>
+        <el-form-item label="令牌" label-position="right">
+          <el-input v-model="currentApiToken" />
+        </el-form-item>
+        <div style="width: 100%; margin-bottom: 15px; display: flex; justify-content: end;">
+          <el-button type="primary" @click="testApi">测试</el-button>
+          <el-button type="primary" @click="updateApi">更新</el-button>
+        </div>
+      </el-form>
+
+      <template #reference>
+        <div class="api-status-container">
+          <span>当前API：</span>
+          <span>{{ currentApiName }}</span>
+          <div v-if="currentApiStatus !== undefined" style=" width: 100px; display: flex;">
+            <span style="margin-left: 20px;">状态：</span>
+            <div v-if="currentApiStatus" style="display: flex;">
+              <span>可用</span>
+              <svg-icon icon-class="circle-ok-green" style="height: 12px; width: 12px;" class="status-icon"/>
+            </div>
+            <div v-else>
+              <span>不可用</span>
+              <svg-icon icon-class="circle-error-red"/>
+            </div>
+          </div>
+          <div v-else style="width: 100px;">
+            <span style="margin-left: 20px;">状态检测中</span>
+            <el-icon class="is-loading" style="margin: 0 3px;">
+              <loading/>
+            </el-icon>
+          </div>
+        </div>
+      </template>
+    </el-popover>
   </div>
 </template>
 
@@ -95,11 +158,28 @@ onMounted(async () => {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+
+  border-radius: 5px;
+}
+
+.api-status-container:hover {
+  background-color: #f0f0f0;
+}
+
+.api-status-container:active {
+  background-color: #eaeaea;
 }
 
 .current-active-icon-container {
   margin-right: 5px;
   display: flex;
   justify-content: center;
+}
+
+.status-icon {
+  height: 12px;
+  width: 12px;
+  margin: 0 3px;
+  align-self: center;
 }
 </style>

@@ -11,3 +11,21 @@
 .splitpanes--dragging .splitpanes__pane {
     transition: none !important;
 }
+
+.el-popover {
+    padding: 0 10px !important;
+}
+
+.el-form-item__label {
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+}
+
+.cannot-select {
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+}

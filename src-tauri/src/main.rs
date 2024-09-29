@@ -2,7 +2,7 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use dotenv::dotenv;
-use crate::service::configuration::{get_configuration, init_configuration};
+use crate::service::configuration::{get_configuration, init_configuration, write_configuration};
 use crate::service::file::{get_file_list, init_file_path, load_file};
 use crate::utils::set_window_shadows;
 
@@ -25,7 +25,8 @@ fn main() {
             get_file_list,
             init_file_path,
             init_configuration,
-            get_configuration
+            get_configuration,
+            write_configuration
         ])
         .setup(|app| {
             set_window_shadows(app);
