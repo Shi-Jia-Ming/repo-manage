@@ -6,6 +6,7 @@ import {appConfigDir} from "@tauri-apps/api/path";
 import {invoke} from "@tauri-apps/api/tauri";
 import TranslateService from "@/utils/translate.service.ts";
 import {Loading} from "@element-plus/icons-vue";
+import {ElPopover} from "element-plus";
 
 const store: Store<any> = useStore();
 
@@ -27,6 +28,8 @@ const currentApiUrl: Ref<string> = ref("");
 const currentApiToken: Ref<string> = ref("");
 const currentApiStatus: Ref<boolean | undefined> = ref();
 
+const apiPopover = ref<InstanceType<typeof ElPopover>>();
+
 onMounted(async () => {
   const appConfigDirPath = await appConfigDir();
   const config: {
@@ -44,6 +47,7 @@ onMounted(async () => {
 });
 
 const testApi = async () => {
+  TranslateService.updateApi(currentApiUrl.value, currentApiToken.value);
   currentApiStatus.value = undefined;
   TranslateService.translate('test').then((_res) => {
     currentApiStatus.value = true;
@@ -53,7 +57,6 @@ const testApi = async () => {
 }
 
 const updateApi = async () => {
-  console.log("update");
   const appConfigDirPath = await appConfigDir();
   await invoke('write_configuration', {
     configDirPath: appConfigDirPath,
@@ -61,7 +64,8 @@ const updateApi = async () => {
     translateUrl: currentApiUrl.value,
     translateToken: currentApiToken.value
   });
-  await testApi();
+
+  apiPopover.value?.hide();
 }
 </script>
 
@@ -81,7 +85,7 @@ const updateApi = async () => {
         <span>当前未激活任何 PDF</span>
       </div>
     </div>
-    <el-popover class="api-tip-popover" width="300" trigger="click">
+    <el-popover ref="apiPopover" class="api-tip-popover" width="300" trigger="click">
       <!-- TODO use class cannot-select -->
       <h3 class="cannot-select">API配置</h3>
       <el-form label-position="right" label-width="auto" style="justify-content: end;">
@@ -104,21 +108,21 @@ const updateApi = async () => {
         <div class="api-status-container">
           <span>当前API：</span>
           <span>{{ currentApiName }}</span>
-          <div v-if="currentApiStatus !== undefined" style=" width: 100px; display: flex;">
+          <div v-if="currentApiStatus !== undefined" style=" width: 110px; display: flex;">
             <span style="margin-left: 20px;">状态：</span>
             <div v-if="currentApiStatus" style="display: flex;">
               <span>可用</span>
-              <svg-icon icon-class="circle-ok-green" style="height: 12px; width: 12px;" class="status-icon"/>
+              <svg-icon icon-class="circle-ok-green" class="status-icon"/>
             </div>
             <div v-else>
               <span>不可用</span>
-              <svg-icon icon-class="circle-error-red"/>
+              <svg-icon icon-class="circle-error-red" class="status-icon"/>
             </div>
           </div>
-          <div v-else style="width: 100px;">
+          <div v-else style="width: 110px;">
             <span style="margin-left: 20px;">状态检测中</span>
             <el-icon class="is-loading" style="margin: 0 3px;">
-              <loading/>
+              <loading />
             </el-icon>
           </div>
         </div>

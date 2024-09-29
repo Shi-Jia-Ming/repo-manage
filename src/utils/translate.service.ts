@@ -4,7 +4,6 @@ import {invoke} from "@tauri-apps/api/tauri";
 
 export default class TranslateService {
     // TODO user select the origin and target language in translation, for now it is hardcoded from en to zh
-    // TODO bug: the translation service is not working when the key is too long, need to fix this
     private static translateUrl: string = "";
     private static translateToken: string = "";
 
@@ -57,10 +56,19 @@ export default class TranslateService {
 
         console.debug(body, response);
 
+
+        if (response.status !== 200) {
+            throw new Error(`翻译失败：${response.status}`);
+        }
         try {
             return response.data.data as string;
         } catch (e) {
             return `翻译失败：${e}`;
         }
+    }
+
+    public static updateApi(url: string, token: string): void {
+        TranslateService.translateUrl = url;
+        TranslateService.translateToken = token;
     }
 }

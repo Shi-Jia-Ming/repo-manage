@@ -25,9 +25,6 @@ translate_token = \"{}\"
 pub fn get_configuration(config_dir_path: &str) -> toml::Value {
     let config_file_name: &str = "config.toml";
     let config_file_path = PathBuf::from(config_dir_path).join(config_file_name);
-    if !config_file_path.exists() {
-        init_configuration(config_dir_path);
-    }
     let config_str = std::fs::read_to_string(config_file_path).unwrap();
     toml::from_str(&config_str).unwrap()
 }

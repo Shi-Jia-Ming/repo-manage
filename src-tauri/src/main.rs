@@ -19,6 +19,7 @@ fn main() {
     if !app_dir.exists() {
         std::fs::create_dir_all(&app_dir).expect("failed to create app dir");
     }
+    init_configuration(app_dir.to_str().unwrap());
 
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
