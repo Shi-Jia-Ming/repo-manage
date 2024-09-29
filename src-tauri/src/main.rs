@@ -1,10 +1,10 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use dotenv::dotenv;
 use crate::service::configuration::{get_configuration, init_configuration, write_configuration};
 use crate::service::file::{get_file_list, init_file_path, load_file};
 use crate::utils::set_window_shadows;
+use dotenv::dotenv;
 
 mod service;
 mod utils;
@@ -13,7 +13,8 @@ fn main() {
     // load env variables
     dotenv().ok();
 
-    let apps_dir = tauri::api::path::app_data_dir(&Default::default()).expect("failed to get app data dir");
+    let apps_dir =
+        tauri::api::path::app_data_dir(&Default::default()).expect("failed to get app data dir");
     let app_dir = apps_dir.join("cn.edu.hit.pdf-translator");
     if !app_dir.exists() {
         std::fs::create_dir_all(&app_dir).expect("failed to create app dir");

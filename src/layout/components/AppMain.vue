@@ -49,7 +49,6 @@ onMounted(() => {
   tabDrag();
 
 
-
 })
 
 // switch or add a tab instance
@@ -77,7 +76,7 @@ const removeTab = (tab: TabInterface) => {
   }
 };
 
-const handleScroll = ({scrollLeft}: {scrollLeft: number}) => {
+const handleScroll = ({scrollLeft}: { scrollLeft: number }) => {
   slideBlockOffsetX.value = scrollLeft;
 };
 
@@ -87,7 +86,7 @@ const tabDrag = () => {
   new Sortable(element, {
     animation: 150,
     ghostClass: 'blue-background-class',
-    onEnd({ newIndex, oldIndex}) {
+    onEnd({newIndex, oldIndex}) {
       // TODO drag tab
       const dragTab = tabList.value.splice(oldIndex!, 1)[0];
       tabList.value.splice(newIndex!, 0, dragTab);

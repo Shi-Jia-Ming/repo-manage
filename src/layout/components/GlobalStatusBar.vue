@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {Store, useStore} from "vuex";
-import {ComputedRef, computed, Ref, onMounted, ref} from "vue";
+import {computed, ComputedRef, onMounted, Ref, ref} from "vue";
 import {TabStateInterface} from "@/store/modules/tab.state.ts";
 import {appConfigDir} from "@tauri-apps/api/path";
 import {invoke} from "@tauri-apps/api/tauri";
@@ -55,7 +55,12 @@ const testApi = async () => {
 const updateApi = async () => {
   console.log("update");
   const appConfigDirPath = await appConfigDir();
-  await invoke('write_configuration', {configDirPath: appConfigDirPath, translateName: currentApiName.value, translateUrl: currentApiUrl.value, translateToken: currentApiToken.value});
+  await invoke('write_configuration', {
+    configDirPath: appConfigDirPath,
+    translateName: currentApiName.value,
+    translateUrl: currentApiUrl.value,
+    translateToken: currentApiToken.value
+  });
   await testApi();
 }
 </script>
@@ -70,7 +75,7 @@ const updateApi = async () => {
       </div>
       <div v-if="activePdfName !== ''" class="current-active">
         <span>当前激活的 PDF：</span>
-        <span>{{activePdfName}}</span>
+        <span>{{ activePdfName }}</span>
       </div>
       <div v-else class="no-active">
         <span>当前未激活任何 PDF</span>
@@ -81,13 +86,13 @@ const updateApi = async () => {
       <h3 class="cannot-select">API配置</h3>
       <el-form label-position="right" label-width="auto" style="justify-content: end;">
         <el-form-item label="名称" label-position="right">
-          <el-input v-model="currentApiName" />
+          <el-input v-model="currentApiName"/>
         </el-form-item>
         <el-form-item label="地址" label-position="right">
-          <el-input v-model="currentApiUrl" />
+          <el-input v-model="currentApiUrl"/>
         </el-form-item>
         <el-form-item label="令牌" label-position="right">
-          <el-input v-model="currentApiToken" />
+          <el-input v-model="currentApiToken"/>
         </el-form-item>
         <div style="width: 100%; margin-bottom: 15px; display: flex; justify-content: end;">
           <el-button type="primary" @click="testApi">测试</el-button>
@@ -130,6 +135,7 @@ const updateApi = async () => {
   flex-direction: row;
   justify-content: space-between;
 }
+
 .current-active-container {
   display: flex;
   justify-content: start;

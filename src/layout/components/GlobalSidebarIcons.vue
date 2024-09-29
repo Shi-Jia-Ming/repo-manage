@@ -41,7 +41,7 @@ const handleSwitch = (sidebarItem: SidebarItem, index: number) => {
           class="sidebar-icon-container"
       >
         <!-- icon animation -->
-        <svg-icon :icon-class="sidebarItem.icon" class-name="sidebar-icon" />
+        <svg-icon :icon-class="sidebarItem.icon" class-name="sidebar-icon"/>
       </div>
 
       <div

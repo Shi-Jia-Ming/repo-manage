@@ -17,7 +17,7 @@ watch(() => props.isShow, (newVal) => {
 <template>
   <div v-if="props.isShow" class="toolbar-content-container">
     <div v-for="child in props.toolbarItem?.children">
-      <div>{{child.title}}</div>
+      <div>{{ child.title }}</div>
     </div>
   </div>
 </template>

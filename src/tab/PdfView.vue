@@ -15,21 +15,24 @@ const pdfUrl: Ref<string> = ref('');
 const pdfIframe: Ref<HTMLElement | null> = ref(null);
 
 // @ts-ignore
-const {wordToTranslate, updateWordToTranslate} = inject<{wordToTranslate: Ref<string>, updateWordToTranslate: (word: string) => void}>('wordToTranslate');
+const {wordToTranslate, updateWordToTranslate} = inject<{
+  wordToTranslate: Ref<string>,
+  updateWordToTranslate: (word: string) => void
+}>('wordToTranslate');
 
 onMounted(async () => {
   // TODO load activate status when the component is mounted
-   try {
-     appDataDirPath.value = await appDataDir();
-     pdfUrl.value = await invoke('load_file', {filePath: appDataDirPath.value + pdfName.value});
-     pdfUrl.value = URL.createObjectURL(base64ToBlob(pdfUrl.value));
-   } catch (e) {
-     console.error(e);
-   }
+  try {
+    appDataDirPath.value = await appDataDir();
+    pdfUrl.value = await invoke('load_file', {filePath: appDataDirPath.value + pdfName.value});
+    pdfUrl.value = URL.createObjectURL(base64ToBlob(pdfUrl.value));
+  } catch (e) {
+    console.error(e);
+  }
 
-   window.addEventListener('message', function (event) {
+  window.addEventListener('message', function (event) {
     console.log('received message: ', event.data);
-   }, false);
+  }, false);
 
   console.log(pdfIframe.value);
 
@@ -60,14 +63,16 @@ function base64ToBlob(code: string) {
   for (let i = 0; i < rawLength; ++i) {
     uInt8Array[i] = raw.charCodeAt(i);
   }
-  return new Blob([uInt8Array], { type: 'application/pdf' });
+  return new Blob([uInt8Array], {type: 'application/pdf'});
 }
 </script>
 
 <template>
   <div class="pdf-view">
     <div class="pdf-main">
-      <iframe ref="pdfIframe" id="pdf" :src="`/pdf.js/web/viewer.html?file=${pdfUrl}&path=${appDataDirPath}&name=${pdfName}`" style="width: 100%; height: 100%;"/>
+      <iframe ref="pdfIframe" id="pdf"
+              :src="`/pdf.js/web/viewer.html?file=${pdfUrl}&path=${appDataDirPath}&name=${pdfName}`"
+              style="width: 100%; height: 100%;"/>
     </div>
   </div>
 </template>

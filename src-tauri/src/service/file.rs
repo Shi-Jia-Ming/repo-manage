@@ -25,7 +25,6 @@ pub fn init_file_path(file_path: &str) {
     }
 }
 
-
 #[command]
 pub fn load_file(file_path: &str) -> String {
     let file = std::fs::File::open(file_path).unwrap();

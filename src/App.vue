@@ -17,7 +17,7 @@ onMounted(async () => {
 
 <template>
   <div class="common-container">
-    <global-layout />
+    <global-layout/>
   </div>
 </template>
 

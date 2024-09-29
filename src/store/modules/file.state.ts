@@ -1,7 +1,7 @@
 import {Module} from "vuex";
 import {DataInterface} from "@/store";
 
-export interface FileInterface extends DataInterface{
+export interface FileInterface extends DataInterface {
     id: number;
     index?: number;
     fileName: string;

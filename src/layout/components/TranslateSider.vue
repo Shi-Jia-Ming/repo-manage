@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import {inject, Ref, watch, ref} from "vue";
+import {inject, Ref, ref, watch} from "vue";
 import TranslateService from "@/utils/translate.service.ts";
 import {Loading} from "@element-plus/icons-vue";
 
 // @ts-ignore
-const {wordToTranslate, updateWordToTranslate} = inject<{wordToTranslate: Ref<string>, updateWordToTranslate: (word: string) => void}>('wordToTranslate');
+const {wordToTranslate, updateWordToTranslate} = inject<{
+  wordToTranslate: Ref<string>,
+  updateWordToTranslate: (word: string) => void
+}>('wordToTranslate');
 
 const targetWord = ref<string>('');
 
@@ -30,13 +33,13 @@ watch(wordToTranslate, (newWord) => {
         </div>
         <div class="translate-loading-icon" v-if="isLoading">
           <el-icon class="is-loading" style="height: 20px; width: 20px;">
-            <loading />
+            <loading/>
           </el-icon>
         </div>
       </div>
 
       <div class="translate-target-content">
-        <span>{{targetWord}}</span>
+        <span>{{ targetWord }}</span>
       </div>
     </div>
     <div class="translate-origin-container">
@@ -44,7 +47,7 @@ watch(wordToTranslate, (newWord) => {
         <span>原文</span>
       </div>
       <div class="translate-origin-content">
-        <span>{{wordToTranslate}}</span>
+        <span>{{ wordToTranslate }}</span>
       </div>
     </div>
   </div>

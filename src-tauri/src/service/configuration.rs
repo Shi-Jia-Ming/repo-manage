@@ -42,7 +42,7 @@ pub fn write_configuration(
     let config_file_name: &str = "config.toml";
     let config_file_path = PathBuf::from(config_dir_path).join(config_file_name);
     let config = format!(
-"[service]
+        "[service]
 translate_name = \"{}\"
 translate_url = \"{}\"
 translate_token = \"{}\"

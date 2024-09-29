@@ -130,10 +130,10 @@ const activate = (file: FileInterface) => {
     </div>
     <div class="document-sidebar-file-list">
       <div
-        class="document-sidebar-file-item"
-        v-for="file in fileList"
-        :style="{backgroundColor: file.active ? '#ffffff' : '#f1f3f5'}"
-        @click="activate(file)"
+          class="document-sidebar-file-item"
+          v-for="file in fileList"
+          :style="{backgroundColor: file.active ? '#ffffff' : '#f1f3f5'}"
+          @click="activate(file)"
       >
         <svg-icon icon-class="pdf-file" style="width: 16px; height: 16px;"/>
         {{ file.fileName }}

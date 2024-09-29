@@ -3,7 +3,7 @@ import GlobalToolBar from "./components/GlobalToolBar.vue";
 import GlobalStatusBar from "@/layout/components/GlobalStatusBar.vue";
 import AppMain from "@/layout/components/AppMain.vue";
 import TranslateSider from "@/layout/components/TranslateSider.vue";
-import {Splitpanes, Pane} from "splitpanes";
+import {Pane, Splitpanes} from "splitpanes";
 import "splitpanes/dist/splitpanes.css";
 import {Ref, ref} from "vue";
 import GlobalSidebarIcons from "@/layout/components/GlobalSidebarIcons.vue";
@@ -28,7 +28,7 @@ const isSidebarVisible: Ref<boolean> = ref(false);
       />
       <splitpanes layout="vertical" class="main-layout default-theme">
         <!-- TODO animation of collapse and expand -->
-        <pane  v-if="isSidebarVisible" class="global-sidebar" min-size="10" max-size="30">
+        <pane v-if="isSidebarVisible" class="global-sidebar" min-size="10" max-size="30">
           <sider :current-component="currentSidebar"/>
         </pane>
         <pane

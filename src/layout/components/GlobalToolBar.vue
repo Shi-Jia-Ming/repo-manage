@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {Close, Minus, FullScreen} from '@element-plus/icons-vue';
+import {Close, FullScreen, Minus} from '@element-plus/icons-vue';
 import {appWindow} from '@tauri-apps/api/window';
 import {defineModel, onMounted, onUnmounted, Ref, ref} from "vue";
 
@@ -43,7 +43,8 @@ const handleToolbarContentHide = (event: any) => {
     <el-button-group size="default" class="btn-container">
       <el-button type="text" @click="handleTranslateCollapse" class="collapse-btn">
         <template #default>
-          <svg-icon :icon-class="isTranslateSiderVisible ? 'close-sidebar' : 'open-sidebar'" style="height: 15px; width: 15px;"/>
+          <svg-icon :icon-class="isTranslateSiderVisible ? 'close-sidebar' : 'open-sidebar'"
+                    style="height: 15px; width: 15px;"/>
         </template>
       </el-button>
       <el-button type="text" @click="appWindow.minimize()" class="min-btn">
